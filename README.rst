@@ -54,6 +54,7 @@ Quick Start
 To run the installer just run:
 
     $ go get github.com/dionyself/golang-cms
+    
     $ bee run
 
 
