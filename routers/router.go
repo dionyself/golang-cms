@@ -34,4 +34,5 @@ func init() {
 	beego.InsertFilter("/vendor-panel", beego.BeforeRouter, controllers.AuthRequest)
 	beego.InsertFilter("/user-panel", beego.BeforeRouter, controllers.AuthRequest)
 	beego.InsertFilter("/secret", beego.BeforeRouter, controllers.AuthRequest)
+	beego.InsertFilter("/*", beego.BeforeExec, controllers.DetectUserAgent)
 }
