@@ -5,14 +5,11 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
-	//"github.com/astaxie/beego/session"
 	_ "github.com/astaxie/beego/session/redis"
 	_ "github.com/go-sql-driver/mysql"
 	//"github.com/dionyself/golang-cms/models"
 	_ "github.com/dionyself/golang-cms/routers"
 )
-
-//var globalSessions *session.Manager
 
 func init() {
 	orm.RegisterDriver("mysql", orm.DR_MySQL)

@@ -19,7 +19,7 @@ func init() {
 
 	// User requests
 	beego.Router("/secret", &controllers.LoginController{}, "get:UserPanelView")
-	beego.Router("/user-panel", &controllers.UserPanelController{}, "get:MainView")
+	beego.Router("/my-account", &controllers.LoginController{}, "get:UserPanelView")
 	beego.Router("/user-offers", &controllers.MainController{})
 
 	// Vendor requests
@@ -33,6 +33,6 @@ func init() {
 	// filters
 	beego.InsertFilter("/vendor-panel", beego.BeforeRouter, controllers.AuthRequest)
 	beego.InsertFilter("/user-panel", beego.BeforeRouter, controllers.AuthRequest)
-	beego.InsertFilter("/secret", beego.BeforeRouter, controllers.AuthRequest)
-	beego.InsertFilter("/*", beego.BeforeExec, controllers.DetectUserAgent)
+	beego.InsertFilter("/my-account", beego.BeforeRouter, controllers.AuthRequest)
+	beego.InsertFilter("/", beego.BeforeExec, controllers.DetectUserAgent)
 }

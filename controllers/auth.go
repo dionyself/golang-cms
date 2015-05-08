@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+
 	"github.com/dionyself/golang-cms/models"
 	"github.com/dionyself/golang-cms/utils"
 
@@ -9,7 +10,7 @@ import (
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/validation"
-	_ "github.com/go-sql-driver/mysql"
+	//_ "github.com/go-sql-driver/mysql"
 )
 
 var sessionName = beego.AppConfig.String("SessionName")
@@ -19,20 +20,19 @@ type LoginController struct {
 }
 
 func (this *LoginController) LoginView() {
-	this.TplNames = "login.html"
+	this.TplNames = "login.tpl"
 }
 
 func (this *LoginController) Login() {
 	username := this.GetString("username")
 	password := this.GetString("password")
+	backTo := this.GetString("back_to")
 
 	var user models.User
 	if VerifyUser(&user, username, password) {
-		v := this.GetSession(sessionName)
-		if v == nil {
-			this.SetSession(sessionName, user.Id)
-		}
-		this.Redirect("/secret", 302)
+		//session_data := this.GetSession(sessionName)
+		this.SetSession(sessionName, user.Id)
+		this.Redirect("/"+backTo, 302)
 
 	} else {
 		this.Redirect("/register", 302)
@@ -46,7 +46,7 @@ func (this *LoginController) Logout() {
 }
 
 func (this *LoginController) RegisterView() {
-	this.TplNames = "register.html"
+	this.TplNames = "register.tpl"
 }
 
 func (this *LoginController) Register() {
@@ -119,8 +119,17 @@ func VerifyUser(user *models.User, username, password string) (success bool) {
 }
 
 var AuthRequest = func(ctx *context.Context) {
-	_, ok := ctx.Input.Session(sessionName).(int)
+	uid, ok := ctx.Input.Session(sessionName).(int)
 	if !ok && ctx.Input.Uri() != "/login" && ctx.Input.Uri() != "/register" {
 		ctx.Redirect(302, "/login")
 	}
+	var user models.User
+	var err error
+	qs := orm.NewOrm()
+	user.Id = uid
+	err = qs.Read(&user, "Id")
+	if err != nil {
+		ctx.Redirect(302, "/login")
+	}
+	ctx.Input.SetData("user", user)
 }

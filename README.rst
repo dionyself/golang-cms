@@ -51,10 +51,9 @@ http://docs.golang-cms-url.org/en/latest/introduction/index.html
 Quick Start
 ***********
 
-To run the installer just run:
+To complire and run the installer just run:
 
+    $ go install  github.com/astaxie/beego
+    $ go get github.com/garyburd/redigo/redis
     $ go get github.com/dionyself/golang-cms
-    
     $ bee run
-
-

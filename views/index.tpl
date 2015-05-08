@@ -2,7 +2,7 @@
 
 <html>
   	<head>
-    	<title>Beego</title>
+    	<title>Golang CMS</title>
     	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 		<style type="text/css">
@@ -66,13 +66,15 @@
 			<div class="container">
 			<div class="row">
 			  <div class="hero-text">
-			    <h1>Welcome to Beego!</h1>
+			    <h1>Welcome to Golang-CMS!</h1>
 			    <p class="description">
-			    	Beego is a simple & powerful Go web framework which is inspired by tornado and sinatra.
+                    Golang-CMS is a full & powerful Go web content management system
+                    which is inspired by djando-cms.
 			    <br />
 			    	Official website: <a href="http://{{.Website}}">{{.Website}}</a>
 			    <br />
 			    	Contact me: {{.Email}}
+                <br> you are visiting the page from a {{.device_type}} device
 			    </p>
 			  </div>
 			</div>

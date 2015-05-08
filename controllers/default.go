@@ -11,25 +11,33 @@ type MainController struct {
 }
 
 func (index *MainController) Get() {
-	index.Data["Website"] = "Golang CMS, Fast CMS"
-	index.Data["description"] = "Fastest and stable cms"
+	index.Data["Website"] = "Golang-CMS, Fast CMS"
+	index.Data["description"] = "Fastest and stable CMS"
 	index.Data["Email"] = "dionyself@gmail.com"
 	index.TplNames = "index.tpl"
 }
 
 var DetectUserAgent = func(ctx *context.Context) {
-	detector := mobiledetect.NewMobileDetect(ctx.Request, nil)
-	session_data := ctx.Input.Session(sessionName)
-	if session_data == nil {
-		m := make(map[string]interface{})
-		m["custom_theme"] = "default"
-		m["custom_view"] = "mobile"
-		m["custom_lang"] = "en"
+	deviceDetector := mobiledetect.NewMobileDetect(ctx.Request, nil)
+	device := ctx.Input.Cookie("Device-Type")
+	if device == "" {
+		device, ok := ctx.Input.GetData("device_type").(string)
+		if ok {
+			ctx.Output.Cookie("Device-Type", device)
+		} else {
+			if deviceDetector.IsMobile() {
+				device = "Mobile"
+			}
+			if deviceDetector.IsTablet() {
+				device = "Tablet"
+			}
+			if device != "" {
+				ctx.Output.Cookie("Device-Type", device)
+			} else {
+				device = beego.AppConfig.String("DefaultVersion")
+				ctx.Output.Cookie("Device-Type", device)
+			}
+		}
 	}
-	if detector.IsMobile() {
-		_, ok := ctx.Input.Session(sessionName).(int)
-	}
-	if detector.IsTablet() {
-		_, ok := ctx.Input.Session(sessionName).(int)
-	}
+	ctx.Input.SetData("device_type", device)
 }
