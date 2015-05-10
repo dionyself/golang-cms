@@ -12,19 +12,28 @@ import (
 )
 
 func init() {
-	orm.RegisterDriver("mysql", orm.DR_MySQL)
+	DbEngine := beego.AppConfig.String("DB_Engine")
+	if DbEngine == "mysql" {
+		orm.RegisterDriver(DbEngine, orm.DR_MySQL)
+	}
 	maxIdle := 30
 	maxConn := 30
-	orm.RegisterDataBase("default", "mysql", "golang_cms:golang_cms@/golang_cms?charset=utf8", maxIdle, maxConn)
+	orm.RegisterDataBase(
+		"default",
+		DbEngine,
+		beego.AppConfig.String("DB_Username")+":"+
+			beego.AppConfig.String("DB_UserPassword")+"@/"+
+			beego.AppConfig.String("DB_Name")+"?charset=utf8",
+		maxIdle,
+		maxConn)
 }
 
 func main() {
 	beego.SessionOn = true
-
 	// DB SETUP
 	name := "default"
-	orm.Debug = true
-	force := true   // re-create db
+	orm.Debug, _ = beego.AppConfig.Bool("DebugMode")
+	force, _ := beego.AppConfig.Bool("ReCreateDB")
 	verbose := true // Print log.
 	err := orm.RunSyncdb(name, force, verbose)
 	if err != nil {
