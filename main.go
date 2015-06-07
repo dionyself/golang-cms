@@ -32,9 +32,9 @@ func main() {
 	beego.SessionOn = true
 	// DB SETUP
 	name := "default"
-	orm.Debug, _ = beego.AppConfig.Bool("DebugMode")
-	force, _ := beego.AppConfig.Bool("ReCreateDB")
-	verbose := true // Print log.
+	orm.Debug, _ = beego.AppConfig.Bool("DB_DebugMode")
+	force, _ := beego.AppConfig.Bool("DB_ReCreate")
+	verbose, _ := beego.AppConfig.Bool("DB_logging")
 	err := orm.RunSyncdb(name, force, verbose)
 	if err != nil {
 		fmt.Println(err)
