@@ -19,25 +19,21 @@ func (index *MainController) Get() {
 
 var DetectUserAgent = func(ctx *context.Context) {
 	deviceDetector := mobiledetect.NewMobileDetect(ctx.Request, nil)
-	device := ctx.Input.Cookie("Device-Type")
+	device, _ := ctx.Input.GetData("device_type").(string)
 	if device == "" {
-		device, ok := ctx.Input.GetData("device_type").(string)
-		if ok {
-			ctx.Output.Cookie("Device-Type", device)
-		} else {
-			if deviceDetector.IsMobile() {
-				device = "Mobile"
-			}
-			if deviceDetector.IsTablet() {
-				device = "Tablet"
-			}
-			if device != "" {
-				ctx.Output.Cookie("Device-Type", device)
-			} else {
-				device = beego.AppConfig.String("DefaultVersion")
-				ctx.Output.Cookie("Device-Type", device)
-			}
+		device = ctx.Input.Cookie("Device-Type")
+	}
+	if device == "" {
+		if deviceDetector.IsMobile() {
+			device = "Mobile"
+		}
+		if deviceDetector.IsTablet() {
+			device = "Tablet"
+		}
+		if device == "" {
+			device = beego.AppConfig.String("DefaultDevice")
 		}
 	}
+	ctx.Output.Cookie("Device-Type", device)
 	ctx.Input.SetData("device_type", device)
 }
