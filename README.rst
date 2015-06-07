@@ -51,7 +51,7 @@ http://docs.golang-cms-url.org/en/latest/introduction/index.html
 Quick Start
 ***********
 
-To complire and run the installer execute.
+To compile and run the installer execute.
 
 - go get -u  github.com/astaxie/beego
 - go get -u  github.com/beego/bee
@@ -60,3 +60,7 @@ To complire and run the installer execute.
 - go get -u  github.com/dionyself/golang-cms
 - cd $GOPATH/src/github.com/dionyself/golang-cms
 - bee run
+
+To run unittests.
+
+ - goconvey $GOPATH/src/github.com/dionyself/golang-cms/tests/
