@@ -18,7 +18,8 @@ type UserPanelController struct {
 }
 
 func (this *UserPanelController) MainView() {
-	this.TplNames = "user-panel.tpl"
+	this.Layout = "layout.html"
+	this.TplNames = "user-panel.html"
 }
 
 type VendorPanelController struct {

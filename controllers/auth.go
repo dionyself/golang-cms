@@ -20,7 +20,8 @@ type LoginController struct {
 }
 
 func (this *LoginController) LoginView() {
-	this.TplNames = "login.tpl"
+	this.Layout = "layout.html"
+	this.TplNames = "login.html"
 }
 
 func (this *LoginController) Login() {
@@ -46,7 +47,8 @@ func (this *LoginController) Logout() {
 }
 
 func (this *LoginController) RegisterView() {
-	this.TplNames = "register.tpl"
+	this.Layout = "layout.html"
+	this.TplNames = "register.html"
 }
 
 func (this *LoginController) Register() {
@@ -82,11 +84,12 @@ func (this *LoginController) Register() {
 		this.Redirect("/", 302)
 
 	}
-	this.TplNames = "register.tpl"
+	this.Layout = "layout.html"
+	this.TplNames = "register.html"
 }
 
 func (this *LoginController) UserPanelView() {
-	this.TplNames = "user-panel.tpl"
+	this.TplNames = "user-panel.html"
 }
 
 func HasUser(user *models.User, username string) bool {
