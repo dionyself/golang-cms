@@ -21,7 +21,7 @@ func (main *MainController) BeforeRender() {
 	main.Data["menu_elements"] = main.GetMenu()
 }
 
-func (main *MainController) GetMenu() []string {
+func (main *MainController) GetMenu() []map[string]string {
 	output := defaults.GetDefaultMenu()
 	return output
 }
