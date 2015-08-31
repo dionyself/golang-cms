@@ -1,21 +1,16 @@
 package modules
 
-/*
 type ModuleConfig struct {
-  Name string
-  Menu int
-  weight int
+	Name   string
+	Menu   string
+	weight int
 }
-var ModulesConfig = []ModuleConfig
-*/
 
-var Modules map[string]map[string]map[string]string
+var Modules []ModuleConfig
 
 func init() {
-	Modules = make(map[string]map[string]map[string]string)
-	news := make(map[string]map[string]string)
-	news["menu"] = make(map[string]string)
-	news["menu"]["news"] = "/"
-	news["menu"]["extra"] = "/"
-	Modules["news"] = news
+	var moduleConfig ModuleConfig
+	moduleConfig.Name = "news"
+	moduleConfig.Menu = "{'news': '/news', 'top_10': '/news_top'}"
+	Modules = append(Modules, moduleConfig)
 }

@@ -16,12 +16,15 @@ func (main *MainController) BeforeRender() {
 	device := main.Ctx.Input.GetData("device_type").(string)
 	main.LayoutSections = make(map[string]string)
 	main.LayoutSections["Head"] = "partial/html_head_" + device + ".html"
-	//main_layout.LayoutSections["Scripts"] = "partial/scripts_" + main_layout.GetString("device_type") + ".html"
-	//main_layout.LayoutSections["Styles"] = "partial/css_" + main_layout.GetString("device_type") + ".html"
 	main.Data["menu_elements"] = main.GetMenu()
 }
 
-func (main *MainController) GetMenu() []map[string]string {
+func (main *MainController) GetMenu() string {
+	output := defaults.GetDefaultMenu()
+	return output
+}
+
+func (main *MainController) GetContent() string {
 	output := defaults.GetDefaultMenu()
 	return output
 }
@@ -29,6 +32,7 @@ func (main *MainController) GetMenu() []map[string]string {
 func (index *MainController) Get() {
 	index.Data["Website"] = "127.0.0.1:8080"
 	index.Data["description"] = "Fastest and stable CMS"
+	// index.Data["content"] = index.getContent()
 	index.Data["Email"] = "dionyself@gmail.com"
 	index.TplNames = "index.html"
 	index.BeforeRender()
