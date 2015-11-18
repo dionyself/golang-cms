@@ -40,7 +40,11 @@ func (index *MainController) Get() {
 
 var DetectUserAgent = func(ctx *context.Context) {
 	deviceDetector := mobiledetect.NewMobileDetect(ctx.Request, nil)
-	device, _ := ctx.Input.GetData("device_type").(string)
+	ctx.Request.ParseForm()
+	device := ""
+	if len(ctx.Request.Form["device_type"]) != 0 {
+		device = ctx.Request.Form["device_type"][0]
+	}
 	if device == "" {
 		device = ctx.Input.Cookie("Device-Type")
 	}
