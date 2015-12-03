@@ -31,7 +31,7 @@ func (main *MainController) GetContent() string {
 
 func (index *MainController) Get() {
 	index.Data["Website"] = "127.0.0.1:8080"
-	index.Data["description"] = "Fastest and stable CMS"
+	index.Data["description"] = "Fast and stable CMS"
 	// index.Data["content"] = index.getContent()
 	index.Data["Email"] = "dionyself@gmail.com"
 	index.TplNames = "index.html"
