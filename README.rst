@@ -47,6 +47,16 @@ Tutorial
 
 http://docs.golang-cms-url.org/en/latest/introduction/index.html
 
+****
+Demo
+****
+
+You will need to run the demo locally.
+If you are using Docker you can run a golang-cms instance on port 8080
+just run:
+
+- docker run -p 8080:8080 dionyself/golang-cms
+
 ***********
 Quick Start
 ***********
