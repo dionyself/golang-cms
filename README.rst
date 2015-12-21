@@ -10,15 +10,11 @@ Open source enterprise content management system based on the BeeGO framework, i
 Features
 ********
 
-* Hierarchical pages
+* Hierarchical categories
 * Extensive support for multilingual websites
-* Multi site support
-* Draft/Published workflows
-* Undo/Redo
 * Use the content blocks (placeholders) in your own apps (models)
 * Use the content blocks (static placeholders) anywhere in your templates
 * Edit content directly in the frontend on your pages
-* Hierarchical content plugins (columns, style changes etc)
 * Navigation rendering and extending from your apps
 * SEO friendly urls
 * Highly integrative into your own apps
