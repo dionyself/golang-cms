@@ -14,16 +14,22 @@ type User struct {
 	Admin      bool      `orm:"column(admin)"`
 	Rands      string    `orm:"size(10)"`
 	Name       string
-	Profile    *Profile `orm:"rel(one)"` // OneToOne relation
+	Profile    *Profile `orm:"rel(one)"`
+	Article *Article `orm:"reverse(one)"`
 }
 
 type Profile struct {
 	Id   int
 	Age  int16
-	User *User `orm:"reverse(one)"` // Reverse relationship (optional)
+	User *User `orm:"reverse(one)"`
 }
 
 func init() {
 	// Need to register model in init
-	orm.RegisterModel(new(User), new(Profile))
+	orm.RegisterModel(
+		new(User),
+		new(Profile),
+		new(Article),
+		new(ArticleComment),
+		new(Category))
 }
