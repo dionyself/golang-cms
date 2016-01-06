@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/Shaked/gomobiledetect"
+	"github.com/dionyself/gomobiledetect"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	"github.com/dionyself/golang-cms/lib/defaults"
