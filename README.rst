@@ -62,7 +62,7 @@ To compile and run the installer execute.
 
 - go get -u  github.com/astaxie/beego
 - go get -u  github.com/beego/bee
-- go get -u  github.com/Shaked/gomobiledetect
+- go get -u  github.com/dionyself/gomobiledetect
 - go get -u  github.com/garyburd/redigo/redis
 - go get -u  github.com/dionyself/golang-cms
 - cd $GOPATH/src/github.com/dionyself/golang-cms
