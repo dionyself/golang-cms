@@ -18,8 +18,9 @@
     <!-- Generic css -->
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">
-
     {{.Styles}}
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 
   </head>
 
@@ -35,6 +36,7 @@
     <li><a href="/register">Register</a></li>
     <li class="divider"></li>
     <li><a href="#!">Panel</a></li>
+    <li><a href="/article/0/new#!">create new article</a></li>
     <li><a href="#!">Logout</a></li>
   </ul>
   <!-- Dropdown Structure2 (yeah duplicaded shit until materialize #97) -->
@@ -43,6 +45,7 @@
     <li><a href="/register">Register</a></li>
     <li class="divider"></li>
     <li><a href="#!">Panel</a></li>
+    <li><a href="/article/0/new#!">create new article</a></li>
     <li><a href="#!">Logout</a></li>
   </ul>
   <div class="nav-wrapper">
@@ -109,9 +112,8 @@
     </footer>
     <!-- js on footer -->
     {{.Scripts}}
-    <!--Import jQuery before materialize.js-->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js"></script>
+    <script src="http://cdn.ckeditor.com/4.5.6/full/ckeditor.js"></script>
     <script type="text/javascript">
         $( document ).ready(function() {
             $(".dropdown-button").dropdown();

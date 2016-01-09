@@ -16,12 +16,12 @@ import (
 var sessionName = beego.AppConfig.String("SessionName")
 
 type LoginController struct {
-	beego.Controller
+	BaseController
 }
 
 func (this *LoginController) LoginView() {
-	this.Layout = "layout.html"
 	this.TplNames = "login.html"
+	this.BeforeRender()
 }
 
 func (this *LoginController) Login() {
@@ -47,8 +47,8 @@ func (this *LoginController) Logout() {
 }
 
 func (this *LoginController) RegisterView() {
-	this.Layout = "layout.html"
 	this.TplNames = "register.html"
+	this.BeforeRender()
 }
 
 func (this *LoginController) Register() {

@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
+	//"github.com/astaxie/beego"
 
 	/*
 		"fmt"
@@ -14,17 +14,17 @@ import (
 	*/)
 
 type UserPanelController struct {
-	beego.Controller
+	BaseController
 }
 
 func (this *UserPanelController) MainView() {
-	this.Layout = "layout.html"
 	this.TplNames = "user-panel.html"
+	this.BeforeRender()
 }
 
 type VendorPanelController struct {
-	beego.Controller
+	BaseController
 }
 type AdminPanelController struct {
-	beego.Controller
+	BaseController
 }
