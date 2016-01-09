@@ -7,29 +7,43 @@ import (
 	"github.com/dionyself/golang-cms/lib/defaults"
 )
 
-type MainController struct {
+type BaseController struct {
 	beego.Controller
 }
 
-func (main *MainController) BeforeRender() {
-	main.Layout = "layout.html"
-	device := main.Ctx.Input.GetData("device_type").(string)
-	main.LayoutSections = make(map[string]string)
-	main.LayoutSections["Head"] = "partial/html_head_" + device + ".html"
-	main.Data["menu_elements"] = main.GetMenu()
+type IndexController struct {
+	BaseController
 }
 
-func (main *MainController) GetMenu() string {
+type ArticleController struct {
+	BaseController
+}
+
+func (this *ArticleController) Get() {
+	this.TplNames = "article-editor.html"
+	this.BeforeRender()
+}
+
+func (base *BaseController) BeforeRender() {
+	base.Layout = "layout.html"
+	device := base.Ctx.Input.GetData("device_type").(string)
+	base.LayoutSections = make(map[string]string)
+	base.LayoutSections["Head"] = "partial/html_head_" + device + ".html"
+	base.Data["menu_elements"] = base.GetMenu()
+}
+
+
+func (base *BaseController) GetMenu() string {
 	output := defaults.GetDefaultMenu()
 	return output
 }
 
-func (main *MainController) GetContent() string {
+func (base *BaseController) GetContent() string {
 	output := defaults.GetDefaultMenu()
 	return output
 }
 
-func (index *MainController) Get() {
+func (index *IndexController) Get() {
 	index.Data["Website"] = "127.0.0.1:8080"
 	index.Data["description"] = "Fast and stable CMS"
 	// index.Data["content"] = index.getContent()
