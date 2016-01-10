@@ -11,25 +11,13 @@ type BaseController struct {
 	beego.Controller
 }
 
-type IndexController struct {
-	BaseController
-}
-
-type ArticleController struct {
-	BaseController
-}
-
-func (this *ArticleController) Get() {
-	this.TplNames = "article-editor.html"
-	this.BeforeRender()
-}
-
-func (base *BaseController) BeforeRender() {
+func (base *BaseController) ConfigPage(page string) {
 	base.Layout = "layout.html"
 	device := base.Ctx.Input.GetData("device_type").(string)
 	base.LayoutSections = make(map[string]string)
 	base.LayoutSections["Head"] = "partial/html_head_" + device + ".html"
 	base.Data["menu_elements"] = base.GetMenu()
+	base.TplNames = page
 }
 
 
@@ -41,15 +29,6 @@ func (base *BaseController) GetMenu() string {
 func (base *BaseController) GetContent() string {
 	output := defaults.GetDefaultMenu()
 	return output
-}
-
-func (index *IndexController) Get() {
-	index.Data["Website"] = "127.0.0.1:8080"
-	index.Data["description"] = "Fast and stable CMS"
-	// index.Data["content"] = index.getContent()
-	index.Data["Email"] = "dionyself@gmail.com"
-	index.TplNames = "index.html"
-	index.BeforeRender()
 }
 
 var DetectUserAgent = func(ctx *context.Context) {
