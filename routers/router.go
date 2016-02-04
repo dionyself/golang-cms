@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-	beego.DirectoryIndex = true
+	//beego.DirectoryIndex = true
 	// static routers
 	beego.SetStaticPath("/static", "static/")
 

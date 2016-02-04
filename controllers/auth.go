@@ -117,7 +117,7 @@ func VerifyUser(user *models.User, username, password string) (success bool) {
 
 var AuthRequest = func(ctx *context.Context) {
 	uid, ok := ctx.Input.Session(sessionName).(int)
-	if !ok && ctx.Input.Uri() != "/login" && ctx.Input.Uri() != "/register" {
+	if !ok && ctx.Input.URI() != "/login" && ctx.Input.URI() != "/register" {
 		ctx.Redirect(302, "/login")
 	}
 	var user models.User

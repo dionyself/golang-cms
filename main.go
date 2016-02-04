@@ -14,7 +14,7 @@ import (
 func init() {
 	DbEngine := beego.AppConfig.String("DB_Engine")
 	if DbEngine == "mysql" {
-		orm.RegisterDriver(DbEngine, orm.DR_MySQL)
+		orm.RegisterDriver(DbEngine, orm.DRMySQL)
 	}
 	maxIdle := 30
 	maxConn := 30
@@ -29,7 +29,7 @@ func init() {
 }
 
 func main() {
-	beego.SessionOn = true
+	//beego.SessionOn = true
 	// DB SETUP
 	name := "default"
 	orm.Debug, _ = beego.AppConfig.Bool("DB_DebugMode")
@@ -39,6 +39,5 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-
 	beego.Run()
 }

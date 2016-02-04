@@ -17,7 +17,7 @@ func (base *BaseController) ConfigPage(page string) {
 	base.LayoutSections = make(map[string]string)
 	base.LayoutSections["Head"] = "partial/html_head_" + device + ".html"
 	base.Data["menu_elements"] = base.GetMenu()
-	base.TplNames = page
+	base.TplName = page
 }
 
 
