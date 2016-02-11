@@ -24,7 +24,6 @@ func init() {
 	beego.InsertFilter("/profile/:id:int/show", beego.BeforeRouter, controllers.AuthRequest)
 	beego.InsertFilter("/article/:id:int/edit", beego.BeforeRouter, controllers.AuthRequest)
 	beego.InsertFilter("/article/:id:int/comment", beego.BeforeRouter, controllers.AuthRequest)
-	beego.InsertFilter("/my-account", beego.BeforeRouter, controllers.AuthRequest)
 	beego.InsertFilter("/*", beego.BeforeExec, controllers.DetectUserAgent)
 	beego.InsertFilter("/", beego.BeforeExec, controllers.DetectUserAgent)
 }
