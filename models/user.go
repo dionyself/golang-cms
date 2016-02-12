@@ -31,5 +31,7 @@ func init() {
 		new(Profile),
 		new(Article),
 		new(ArticleComment),
-		new(Category))
+		new(Category),
+		new(ArticleLike),
+		new(CommentLike))
 }
