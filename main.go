@@ -7,35 +7,54 @@ import (
 	"github.com/astaxie/beego/orm"
 	_ "github.com/astaxie/beego/session/redis"
 	_ "github.com/go-sql-driver/mysql"
-	//"github.com/dionyself/golang-cms/models"
+    _ "github.com/lib/pq"
+    _ "github.com/mattn/go-sqlite3"
 	_ "github.com/dionyself/golang-cms/routers"
 )
 
 func init() {
+	DbAddress := ""
 	DbEngine := beego.AppConfig.String("DB_Engine")
-	if DbEngine == "mysql" {
-		orm.RegisterDriver(DbEngine, orm.DRMySQL)
-	}
+	DbServerPort := beego.AppConfig.String("DB_ServerPort")
+	DbUsername  := beego.AppConfig.String("DB_Username")
+	DbUserPassword := beego.AppConfig.String("DB_UserPassword")
+	DbServer := beego.AppConfig.String("DB_Server")
+	DbName := beego.AppConfig.String("DB_Name")
 	maxIdle := 30
 	maxConn := 30
-	orm.RegisterDataBase(
+	if DbEngine == "mysql" {
+		orm.RegisterDriver(DbEngine, orm.DRMySQL)
+		if DbServerPort == "0" {
+			DbServerPort = "3306"
+		}
+		DbAddress = DbUsername+":"+DbUserPassword+"@tcp("+DbServer+":"+DbServerPort+")/"+DbName+"?charset=utf8"
+	} else if DbEngine == "sqlite3" {
+		orm.RegisterDriver(DbEngine, orm.DRSqlite)
+		DbAddress = "file:"+beego.AppConfig.String("DB_SqliteFile")
+	} else if DbEngine == "postgres" {
+		orm.RegisterDriver(DbEngine, orm.DRPostgres)
+		if DbServerPort == "0" {
+		   DbServerPort = "5432"
+	    }
+		DbAddress = "user="+DbUsername+" password="+DbUserPassword+" dbname="+DbName+" host="+DbServer+" port="+DbServerPort+" sslmode=disable"
+	}
+	err:=orm.RegisterDataBase(
 		"default",
 		DbEngine,
-		beego.AppConfig.String("DB_Username")+":"+
-			beego.AppConfig.String("DB_UserPassword")+"@/"+
-			beego.AppConfig.String("DB_Name")+"?charset=utf8",
+		DbAddress,
 		maxIdle,
 		maxConn)
+	if err!=nil{
+       panic(err)
+    }
 }
 
 func main() {
-	//beego.SessionOn = true
 	// DB SETUP
-	name := "default"
 	orm.Debug, _ = beego.AppConfig.Bool("DB_DebugMode")
 	force, _ := beego.AppConfig.Bool("DB_ReCreate")
-	verbose, _ := beego.AppConfig.Bool("DB_logging")
-	err := orm.RunSyncdb(name, force, verbose)
+	verbose, _ := beego.AppConfig.Bool("DB_Logging")
+	err := orm.RunSyncdb("default", force, verbose)
 	if err != nil {
 		fmt.Println(err)
 	}
