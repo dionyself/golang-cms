@@ -1,6 +1,6 @@
-        <form>
+        <form method="post">
           <label for="title">Title</label>
-          <input type="text" id="title" name="title">
+          <input type="text" id="title" name="title" value="{{.form.Title}}">
           <div>
              <label for="category">Choose a Category:</label>
              <select id="category" name="category" class="browser-default">
@@ -13,7 +13,7 @@
           <i class="material-icons prefix">mode_edit</i>
           <label for="content">Content</label>
           <textarea name="content" id="content" rows="10" cols="80">
-                you are creating a a new article.
+                {{.form.Content}}
           </textarea>
           <script type="text/javascript">
                 $( document ).ready(function() {
@@ -21,24 +21,24 @@
                  });    
            </script>
            <label for="topic-tags">Topic tags</label>
-           <input type="text" id="topic-tags" name="topic-tags">
+           <input type="text" id="topic-tags" name="topic-tags" value="{{.form.TopicTags}}">
            <div class="switch">
              Comments: 
              <label>
                Off
-               <input type="checkbox">
+               <input type="checkbox" name="allow-comments" {{if .form.AllowComments}}checked{{end}}>
                <span class="lever"></span>
                On
              </label>
              Reviews: 
              <label>
                Off
-               <input type="checkbox">
+               <input type="checkbox" name="allow-reviews" {{if .form.AllowReviews}}checked{{end}}>
                <span class="lever"></span>
                On
              </label>
            </div>
-           <label for="tag-users">Tag Friends</label>
-           <input type="text" id="tag-users" name="tag-users">
+           <label for="tagged-users">Tag Friends</label>
+           <input type="text" id="tagged-users" name="tagged-users" value="{{.form.TaggedUsers}}">
            <button type="submit">Save Article</button>
         </form>

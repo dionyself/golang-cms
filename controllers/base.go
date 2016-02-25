@@ -58,3 +58,4 @@ var DetectUserAgent = func(ctx *context.Context) {
 	ctx.Output.Cookie("Device-Type", device)
 	ctx.Input.SetData("device_type", device)
 }
+
