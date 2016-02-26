@@ -64,6 +64,7 @@ To compile and run the installer execute.
 
 - go get -u  github.com/astaxie/beego
 - go get -u  github.com/beego/bee
+- go get -u  github.com/mattn/go-sqlite3
 - go get -u  github.com/dionyself/gomobiledetect
 - go get -u  github.com/garyburd/redigo/redis
 - go get -u  github.com/dionyself/golang-cms
