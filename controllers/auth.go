@@ -10,7 +10,6 @@ import (
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/validation"
-	//_ "github.com/go-sql-driver/mysql"
 )
 
 var sessionName = beego.AppConfig.String("SessionName")
@@ -68,8 +67,7 @@ func (this *LoginController) Register() {
 		salt := utils.GetRandomString(10)
 		encodedPwd := salt + "$" + utils.EncodePassword(password, salt)
 
-		o := orm.NewOrm()
-		o.Using("default")
+		o := this.GetDB()
 		profile := new(models.Profile)
 		profile.Age = 30
 		user := new(models.User)

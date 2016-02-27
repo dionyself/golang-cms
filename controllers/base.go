@@ -5,6 +5,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	"github.com/dionyself/golang-cms/lib/defaults"
+	"github.com/astaxie/beego/orm"
 )
 
 type BaseController struct {
@@ -20,6 +21,14 @@ func (base *BaseController) ConfigPage(page string) {
 	base.TplName = page
 }
 
+
+func (base *BaseController) GetDB(db ...string) orm.Ormer {
+	O := orm.NewOrm()
+	if len(db) > 0 {
+	   O.Using(db[0])
+	   }
+	return O
+}
 
 func (base *BaseController) GetMenu() string {
 	output := defaults.GetDefaultMenu()

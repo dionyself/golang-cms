@@ -4,10 +4,10 @@
           <div>
              <label for="category">Choose a Category:</label>
              <select id="category" name="category" class="browser-default">
-               <option value="" disabled selected>No Category selected</option>
-               <option value="1">Option 1</option>
-               <option value="2">Option 2</option>
-               <option value="3">Option 3</option>
+               {{ if not .form.Category}}<option value="" disabled selected>No Category selected</option>{{end}}
+               {{ range .Categories }} 
+               <option value="{{.Id}}" {{if eq .Id $.form.Category}}selected{{end}}>{{.Name}}</option>
+               {{ end }}
              </select>
           </div>
           <i class="material-icons prefix">mode_edit</i>

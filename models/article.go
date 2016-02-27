@@ -30,5 +30,5 @@ type ArticleComment struct {
 type Category struct {
 	Id         int       `orm:"column(id);auto"`
 	Name       string    `orm:"column(name);size(128)"`
-	Article    *Article `orm:"reverse(one)"`
+	Articles    *Article `orm:"reverse(one)"`
 }
