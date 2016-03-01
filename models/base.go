@@ -1,9 +1,8 @@
 package models
 
-import (
 //	 "github.com/astaxie/beego/orm"
-    )
+
 //var DB orm.Ormer = orm.NewOrm()
 func init() {
-     //DB.Using("default")
-     }
+	//DB.Using("default")
+}

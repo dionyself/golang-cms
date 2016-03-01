@@ -1,10 +1,5 @@
 package controllers
 
-import (
-
-)
-
-
 type IndexController struct {
 	BaseController
 }

@@ -1,8 +1,9 @@
 package models
 
 import (
-	"github.com/astaxie/beego/orm"
 	"time"
+
+	"github.com/astaxie/beego/orm"
 )
 
 type User struct {
@@ -15,7 +16,7 @@ type User struct {
 	Rands      string    `orm:"size(10)"`
 	Name       string
 	Profile    *Profile `orm:"rel(one)"`
-	Article *Article `orm:"reverse(one)"`
+	Article    *Article `orm:"reverse(one)"`
 }
 
 type Profile struct {

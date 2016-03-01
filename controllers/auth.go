@@ -9,7 +9,6 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/orm"
-	"github.com/astaxie/beego/validation"
 )
 
 var sessionName = beego.AppConfig.String("SessionName")
@@ -50,29 +49,21 @@ func (this *LoginController) RegisterView() {
 }
 
 func (this *LoginController) Register() {
-	username := this.GetString("username")
-	password := this.GetString("password")
-	passwordre := this.GetString("passwordre")
-	test := models.RegisterForm{Username: username, Password: password, PasswordRe: passwordre}
-
-	valid := validation.Validation{}
-	b, err := valid.Valid(&test)
-	if err != nil {
+	form := models.RegisterForm{}
+	if err := this.ParseForm(&form); err != nil {
+		this.Abort("401")
 	}
-	if !b {
-		for _, err := range valid.Errors {
-			fmt.Println(err.Key, err.Message)
-		}
-	} else {
+
+	if form.Validate() {
 		salt := utils.GetRandomString(10)
-		encodedPwd := salt + "$" + utils.EncodePassword(password, salt)
+		encodedPwd := salt + "$" + utils.EncodePassword(form.Password, salt)
 
 		o := this.GetDB()
 		profile := new(models.Profile)
 		profile.Age = 30
 		user := new(models.User)
 		user.Profile = profile
-		user.Username = username
+		user.Username = form.Username
 		user.Password = encodedPwd
 		user.Rands = salt
 		fmt.Println(o.Insert(profile))
@@ -80,8 +71,9 @@ func (this *LoginController) Register() {
 
 		this.Redirect("/", 302)
 
+	} else {
+		this.ConfigPage("register.html")
 	}
-	this.ConfigPage("register.html")
 }
 
 func HasUser(user *models.User, username string) bool {

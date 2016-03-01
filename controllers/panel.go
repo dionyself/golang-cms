@@ -1,17 +1,16 @@
 package controllers
 
-import (
-	//"github.com/astaxie/beego"
+//"github.com/astaxie/beego"
 
-	/*
-		"fmt"
-		"github.com/astaxie/beego/context"
-		"github.com/astaxie/beego/orm"
-		"github.com/astaxie/beego/validation"
-		_ "github.com/go-sql-driver/mysql"
-		"github.com/dionyself/golang-cms/models"
-		"github.com/dionyself/golang-cms/utils"
-	*/)
+/*
+	"fmt"
+	"github.com/astaxie/beego/context"
+	"github.com/astaxie/beego/orm"
+	"github.com/astaxie/beego/validation"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/dionyself/golang-cms/models"
+	"github.com/dionyself/golang-cms/utils"
+*/
 
 type UserPanelController struct {
 	BaseController

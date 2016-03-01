@@ -1,9 +1,5 @@
 package controllers
 
-import (
-
-)
-
 type ProfileController struct {
 	BaseController
 }

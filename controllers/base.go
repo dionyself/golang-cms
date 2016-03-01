@@ -1,11 +1,11 @@
 package controllers
 
 import (
-	"github.com/dionyself/gomobiledetect"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
-	"github.com/dionyself/golang-cms/lib/defaults"
 	"github.com/astaxie/beego/orm"
+	"github.com/dionyself/golang-cms/lib/defaults"
+	"github.com/dionyself/gomobiledetect"
 )
 
 type BaseController struct {
@@ -21,12 +21,11 @@ func (base *BaseController) ConfigPage(page string) {
 	base.TplName = page
 }
 
-
 func (base *BaseController) GetDB(db ...string) orm.Ormer {
 	O := orm.NewOrm()
 	if len(db) > 0 {
-	   O.Using(db[0])
-	   }
+		O.Using(db[0])
+	}
 	return O
 }
 
@@ -67,4 +66,3 @@ var DetectUserAgent = func(ctx *context.Context) {
 	ctx.Output.Cookie("Device-Type", device)
 	ctx.Input.SetData("device_type", device)
 }
-
