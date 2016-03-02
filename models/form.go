@@ -6,7 +6,7 @@ import (
 )
 
 type BaseForm struct {
-	Errors map[string]string
+	InvalidFields map[string]string `form:"-"`
 }
 
 func (form *BaseForm) Validate() bool {
@@ -17,7 +17,7 @@ func (form *BaseForm) Validate() bool {
 	}
 	if !b {
 		for _, err := range valid.Errors {
-			form.Errors[err.Key] = err.Message
+			form.InvalidFields[err.Key] = err.Message
 			beego.Debug(err.Key, err.Message)
 		}
 	}
@@ -49,11 +49,11 @@ type ArticleForm struct {
 	TaggedUsers   string `form:"tagged-users" valid:"MinSize(4); MaxSize(300)"`
 	AllowReviews  bool   `form:"allow-reviews" valid:"Required"`
 	AllowComments bool   `form:"allow-comments" valid:"Required"`
-	Errors        map[string]string
+	// InvalidFields map[string]string `form:"-"`
 }
 
 func (form *ArticleForm) Valid(v *validation.Validation) {
-	if form.Category >= 0 {
+	if form.Category < 0 {
 		v.SetError("Category", "Invalid category")
 		return
 	}

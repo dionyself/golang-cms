@@ -20,8 +20,8 @@ func init() {
 	DbUserPassword := beego.AppConfig.String("DB_UserPassword")
 	DbServer := beego.AppConfig.String("DB_Server")
 	DbName := beego.AppConfig.String("DB_Name")
-	maxIdle := 30
-	maxConn := 30
+	maxIdle := 300
+	maxConn := 300
 	if DbEngine == "mysql" {
 		orm.RegisterDriver(DbEngine, orm.DRMySQL)
 		if DbServerPort == "0" {

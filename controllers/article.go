@@ -18,6 +18,7 @@ func (this *ArticleController) Get() {
 	}
 	db := this.GetDB("default")
 	if ArtId == 0 {
+		this.Data["form"] = models.ArticleForm{}
 		var cats []*models.Category
 		db.QueryTable("category").All(&cats)
 		this.Data["Categories"] = cats
@@ -44,10 +45,19 @@ func (this *ArticleController) Post() {
 			db.QueryTable("category").All(&cats)
 			this.Data["Categories"] = cats
 			this.ConfigPage("article-editor.html")
-			for key, msg := range form.Errors {
+			for key, msg := range form.InvalidFields {
 				fmt.Println(key, msg)
 			}
 		} else {
+			cat := new(models.Category)
+			cat.Id = form.Category
+			db.Read(cat, "Id")
+			Art.Category = cat
+			user := this.Data["user"].(models.User)
+			Art.User = &user
+			Art.Title = form.Title
+			Art.Content = form.Content
+			Art.AllowComments = form.AllowComments
 			db.Insert(Art)
 			this.Data["Article"] = Art
 			this.ConfigPage("article.html")

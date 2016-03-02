@@ -15,8 +15,8 @@ type User struct {
 	Admin      bool      `orm:"column(admin)"`
 	Rands      string    `orm:"size(10)"`
 	Name       string
-	Profile    *Profile `orm:"rel(one)"`
-	Article    *Article `orm:"reverse(one)"`
+	Profile    *Profile   `orm:"rel(one)"`
+	Article    []*Article `orm:"reverse(many)"`
 }
 
 type Profile struct {

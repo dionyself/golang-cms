@@ -1,4 +1,3 @@
-        {{.form.Errors}}
         <form method="post">
           <label for="title">Title</label>
           <input type="text" id="title" name="title" value="{{.form.Title}}">
@@ -6,7 +5,7 @@
              <label for="category">Choose a Category:</label>
              <select id="category" name="category" class="browser-default">
                {{ if not .form.Category}}<option value="" disabled selected>No Category selected</option>{{end}}
-               {{ range .Categories }} 
+               {{ range .Categories }}
                <option value="{{.Id}}" {{if eq .Id $.form.Category}}selected{{end}}>{{.Name}}</option>
                {{ end }}
              </select>
@@ -19,19 +18,19 @@
           <script type="text/javascript">
                 $( document ).ready(function() {
                     CKEDITOR.replace("content");
-                 });    
+                 });
            </script>
            <label for="topic-tags">Topic tags</label>
            <input type="text" id="topic-tags" name="topic-tags" value="{{.form.TopicTags}}">
            <div class="switch">
-             Comments: 
+             Comments:
              <label>
                Off
                <input type="checkbox" name="allow-comments" {{if .form.AllowComments}}checked{{end}}>
                <span class="lever"></span>
                On
              </label>
-             Reviews: 
+             Reviews:
              <label>
                Off
                <input type="checkbox" name="allow-reviews" {{if .form.AllowReviews}}checked{{end}}>
