@@ -26,7 +26,7 @@ func (this *ArticleController) Get() {
 	} else {
 		Art := new(models.Article)
 		Art.Id = ArtId
-		db.Read(&Art, "Id")
+		db.Read(Art, "Id")
 		this.Data["Article"] = Art
 		this.ConfigPage("article.html")
 	}
