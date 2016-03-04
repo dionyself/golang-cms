@@ -45,6 +45,7 @@ To compile and run the installer execute. (you will need to have "GO v1.5" or la
 - cd $GOPATH/src/github.com/dionyself/golang-cms
 - bee run
 
+Browse 127.0.0.1:8080 to see GolangCMS running.
 Note: You will be running a pre-alpha version in testmode.
 
 *************
