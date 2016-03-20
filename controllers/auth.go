@@ -31,8 +31,11 @@ func (this *LoginController) Login() {
 	if VerifyUser(&user, username, password) {
 		//session_data := this.GetSession(sessionName)
 		this.SetSession(sessionName, user.Id)
-		this.Redirect("/"+backTo, 302)
-
+		if backTo != "" {
+			this.Redirect("/"+backTo, 302)
+		} else {
+			this.Redirect("/profile/0/show", 302)
+		}
 	} else {
 		this.Redirect("/register", 302)
 	}
@@ -118,5 +121,6 @@ var AuthRequest = func(ctx *context.Context) {
 	if err != nil {
 		ctx.Redirect(302, "/login")
 	}
+	qs.LoadRelated(&user, "Profile")
 	ctx.Input.SetData("user", user)
 }

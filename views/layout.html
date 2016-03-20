@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-	<title>your account</title>
-
+	  <title>your account</title>
     <meta charset="utf-8">
-    <title></title>
     <meta name="description" content="">
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
@@ -12,68 +10,56 @@
     <meta http-equiv="cleartype" content="on">
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
     {{.Head}}
-
     <!-- Generic css -->
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">
     {{.Styles}}
     <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-
   </head>
-
   <body>
-
-
-
-
-<nav>
-  <!-- Dropdown Structure -->
-  <ul id="dropdown1" class="dropdown-content">
-    <li><a href="/login">Login</a></li>
-    <li><a href="/register">Register</a></li>
-    <li class="divider"></li>
-    <li><a href="#!">Panel</a></li>
-    <li><a href="/article/0/edit">create new article</a></li>
-    <li><a href="#!">Logout</a></li>
-  </ul>
-  <!-- Dropdown Structure2 (yeah duplicaded shit until materialize #97) -->
-  <ul id="dropdown2" class="dropdown-content">
-    <li><a href="/login">Login</a></li>
-    <li><a href="/register">Register</a></li>
-    <li class="divider"></li>
-    <li><a href="#!">Panel</a></li>
-    <li><a href="/article/0/edit">create new article</a></li>
-    <li><a href="#!">Logout</a></li>
-  </ul>
-  <div class="nav-wrapper">
-    <a href="/#!" class="brand-logo">Golang-CMS</a>
-    <ul class="right hide-on-med-and-down">
-      <li><a href="#!">Documentation</a></li>
-      <li><a href="#!">Downloads</a></li>
-      <!-- Dropdown Trigger -->
-      <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Account<i class="material-icons right">arrow_drop_down</i></a></li>
-    </ul>
-    <ul id="slide-out" class="side-nav">
-      <li><a href="#!">Documentation</a></li>
-      <li><a href="#!">Downloads</a></li>
-      <!-- Dropdown Trigger -->
-      <li><a class="dropdown-button" href="#!" data-activates="dropdown2">Account<i class="material-icons right">arrow_drop_down</i></a></li>
-    </ul>
-  <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
-  </div>
-</nav>
-
-
-
+    <nav>
+      <!-- Dropdown Structure -->
+      <ul id="dropdown1" class="dropdown-content">
+        <li><a href="/login">Login</a></li>
+        <li><a href="/register">Register</a></li>
+        <li class="divider"></li>
+        <li><a href="#!">Panel</a></li>
+        <li><a href="/article/0/edit">create new article</a></li>
+        <li><a href="#!">Logout</a></li>
+      </ul>
+      <!-- Dropdown Structure2 (yeah duplicaded shit until materialize #97) -->
+      <ul id="dropdown2" class="dropdown-content">
+        <li><a href="/login">Login</a></li>
+        <li><a href="/register">Register</a></li>
+        <li class="divider"></li>
+        <li><a href="#!">Panel</a></li>
+        <li><a href="/article/0/edit">create new article</a></li>
+        <li><a href="#!">Logout</a></li>
+      </ul>
+      <div class="nav-wrapper">
+        <a href="/#!" class="brand-logo">Golang-CMS</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="#!">Documentation</a></li>
+          <li><a href="#!">Downloads</a></li>
+          <!-- Dropdown Trigger -->
+          <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Account<i class="material-icons right">arrow_drop_down</i></a></li>
+        </ul>
+        <ul id="slide-out" class="side-nav">
+          <li><a href="#!">Documentation</a></li>
+          <li><a href="#!">Downloads</a></li>
+          <!-- Dropdown Trigger -->
+          <li><a class="dropdown-button" href="#!" data-activates="dropdown2">Account<i class="material-icons right">arrow_drop_down</i></a></li>
+        </ul>
+        <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+      </div>
+    </nav>
     <div class="container">
       <main-menu elements="{{.menu_elements}}"></main-menu>
       <div id="{{.device_type}}-header-content"></div>
       {{.LayoutContent}}
     </div>
-
     <footer class="page-footer">
       <div class="container">
         <div class="row">

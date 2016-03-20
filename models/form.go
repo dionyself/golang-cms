@@ -1,34 +1,24 @@
 package models
 
 import (
-	"github.com/astaxie/beego"
+	//"github.com/astaxie/beego"
 	"github.com/astaxie/beego/validation"
 )
 
-type BaseForm struct {
+type RegisterForm struct {
+	BaseForm
+	Username      string            `form:"username" valid:"Required;AlphaNumeric;MinSize(4);MaxSize(300)"`
+	Password      string            `form:"password" valid:"Required;MinSize(4);MaxSize(30)"`
+	PasswordRe    string            `form:"passwordre" valid:"Required;MinSize(4);MaxSize(30)"`
 	InvalidFields map[string]string `form:"-"`
 }
 
-func (form *BaseForm) Validate() bool {
-	valid := validation.Validation{}
-	b, err := valid.Valid(form)
-	if err != nil {
-		beego.Error(err)
+func (form *RegisterForm) Validate() bool {
+	valid := form.BaseForm.Validate(form)
+	if valid != true {
+		form.InvalidFields = form.BaseForm.InvalidFields
 	}
-	if !b {
-		for _, err := range valid.Errors {
-			form.InvalidFields[err.Key] = err.Message
-			beego.Debug(err.Key, err.Message)
-		}
-	}
-	return b
-}
-
-type RegisterForm struct {
-	BaseForm
-	Username   string `form:"username" valid:"Required; AlphaNumeric; MinSize(4); MaxSize(300)"`
-	Password   string `form:"password" valid:"Required; MinSize(4); MaxSize(30)"`
-	PasswordRe string `form:"passwordre" valid:"Required; MinSize(4); MaxSize(30)"`
+	return valid
 }
 
 func (form *RegisterForm) Valid(v *validation.Validation) {
@@ -41,15 +31,23 @@ func (form *RegisterForm) Valid(v *validation.Validation) {
 
 type ArticleForm struct {
 	BaseForm
-	Id            int    `form:"-"`
-	Title         string `form:"title" valid:"Required;MinSize(4);MaxSize(300)"`
-	Category      int    `form:"category"`
-	Content       string `form:"content" valid:"Required; MinSize(50); MaxSize(2000)"`
-	TopicTags     string `form:"topic-tags" valid:"MinSize(4); MaxSize(300)"`
-	TaggedUsers   string `form:"tagged-users" valid:"MinSize(4); MaxSize(300)"`
-	AllowReviews  bool   `form:"allow-reviews" valid:"Required"`
-	AllowComments bool   `form:"allow-comments" valid:"Required"`
-	// InvalidFields map[string]string `form:"-"`
+	Id            int               `form:"-"`
+	Title         string            `form:"title" valid:"Required;MinSize(4);MaxSize(300)"`
+	Category      int               `form:"category"`
+	Content       string            `form:"content" valid:"Required;MinSize(50);MaxSize(2000)"`
+	TopicTags     string            `form:"topic-tags" valid:"MinSize(4);MaxSize(300)"`
+	TaggedUsers   string            `form:"tagged-users" valid:"MinSize(4);MaxSize(300)"`
+	AllowReviews  bool              `form:"allow-reviews" valid:"Required"`
+	AllowComments bool              `form:"allow-comments" valid:"Required"`
+	InvalidFields map[string]string `form:"-"`
+}
+
+func (form *ArticleForm) Validate() bool {
+	valid := form.BaseForm.Validate(form)
+	if valid != true {
+		form.InvalidFields = form.BaseForm.InvalidFields
+	}
+	return valid
 }
 
 func (form *ArticleForm) Valid(v *validation.Validation) {

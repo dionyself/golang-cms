@@ -13,6 +13,8 @@ func InsertDemoData() bool {
 	encodedPwd := salt + "$" + EncodePassword("test", salt)
 	profile := new(models.Profile)
 	profile.Age = 30
+	profile.Name = "Test Rosario"
+	profile.Description = "Hi, Please insert here a litte description about you. this is just a demo."
 	user.Profile = profile
 	db.Insert(profile)
 	user.Password = encodedPwd
