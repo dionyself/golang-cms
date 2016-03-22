@@ -5,8 +5,6 @@ import (
 	"github.com/astaxie/beego/validation"
 )
 
-//var DB orm.Ormer = orm.NewOrm()
-
 type BaseForm struct {
 	InvalidFields map[string]string `form:"-"`
 }

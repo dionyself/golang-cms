@@ -17,53 +17,57 @@ type LoginController struct {
 	BaseController
 }
 
-func (this *LoginController) LoginView() {
-	this.ConfigPage("login.html")
+func (CTRL *LoginController) LoginView() {
+	CTRL.ConfigPage("login.html")
 
 }
 
-func (this *LoginController) Login() {
-	username := this.GetString("username")
-	password := this.GetString("password")
-	backTo := this.GetString("back_to")
+func (CTRL *LoginController) Login() {
+	username := CTRL.GetString("username")
+	password := CTRL.GetString("password")
+	backTo := CTRL.GetString("back_to")
 
 	var user models.User
 	if VerifyUser(&user, username, password) {
-		//session_data := this.GetSession(sessionName)
-		this.SetSession(sessionName, user.Id)
+		CTRL.SetSession(sessionName, user.Id)
 		if backTo != "" {
-			this.Redirect("/"+backTo, 302)
+			CTRL.Redirect("/"+backTo, 302)
 		} else {
-			this.Redirect("/profile/0/show", 302)
+			CTRL.Redirect("/profile/0/show", 302)
 		}
 	} else {
-		this.Redirect("/register", 302)
+		CTRL.Redirect("/register", 302)
 	}
 
 }
 
-func (this *LoginController) Logout() {
-	this.DelSession(sessionName)
-	this.Redirect("/login", 302)
+func (CTRL *LoginController) Logout() {
+	CTRL.DelSession(sessionName)
+	CTRL.Redirect("/login", 302)
 }
 
-func (this *LoginController) RegisterView() {
-	this.ConfigPage("register.html")
+func (CTRL *LoginController) RegisterView() {
+	CTRL.ConfigPage("register.html")
 }
 
-func (this *LoginController) Register() {
+func (CTRL *LoginController) Register() {
 	form := models.RegisterForm{}
-	if err := this.ParseForm(&form); err != nil {
-		this.Abort("401")
+	if err := CTRL.ParseForm(&form); err != nil {
+		CTRL.Abort("401")
 	}
 
 	if form.Validate() {
 		salt := utils.GetRandomString(10)
 		encodedPwd := salt + "$" + utils.EncodePassword(form.Password, salt)
 
-		o := this.GetDB()
+		o := CTRL.GetDB()
 		profile := new(models.Profile)
-		profile.Age = 30
+		profile.Age = 0
+		profile.Avatar = "female"
+		if form.Gender {
+			profile.Avatar = "male"
+		}
+		profile.Gender = form.Gender
 		user := new(models.User)
 		user.Profile = profile
 		user.Username = form.Username
@@ -72,10 +76,14 @@ func (this *LoginController) Register() {
 		fmt.Println(o.Insert(profile))
 		fmt.Println(o.Insert(user))
 
-		this.Redirect("/", 302)
+		CTRL.Redirect("/", 302)
 
 	} else {
-		this.ConfigPage("register.html")
+		CTRL.Data["form"] = form
+		for key, msg := range form.InvalidFields {
+			fmt.Println(key, msg)
+		}
+		CTRL.ConfigPage("register.html")
 	}
 }
 
@@ -112,6 +120,7 @@ var AuthRequest = func(ctx *context.Context) {
 	uid, ok := ctx.Input.Session(sessionName).(int)
 	if !ok && ctx.Input.URI() != "/login" && ctx.Input.URI() != "/register" {
 		ctx.Redirect(302, "/login")
+		return
 	}
 	var user models.User
 	var err error
@@ -120,6 +129,7 @@ var AuthRequest = func(ctx *context.Context) {
 	err = qs.Read(&user, "Id")
 	if err != nil {
 		ctx.Redirect(302, "/login")
+		return
 	}
 	qs.LoadRelated(&user, "Profile")
 	ctx.Input.SetData("user", user)

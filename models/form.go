@@ -1,15 +1,17 @@
 package models
 
 import (
-	//"github.com/astaxie/beego"
 	"github.com/astaxie/beego/validation"
 )
 
 type RegisterForm struct {
 	BaseForm
+	Name          string            `form:"name" valid:"Required;"`
+	Email         string            `form:"email" valid:"Required;"`
 	Username      string            `form:"username" valid:"Required;AlphaNumeric;MinSize(4);MaxSize(300)"`
 	Password      string            `form:"password" valid:"Required;MinSize(4);MaxSize(30)"`
 	PasswordRe    string            `form:"passwordre" valid:"Required;MinSize(4);MaxSize(30)"`
+	Gender        bool              `form:"gender" valid:"Required"`
 	InvalidFields map[string]string `form:"-"`
 }
 

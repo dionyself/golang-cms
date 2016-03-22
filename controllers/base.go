@@ -12,16 +12,16 @@ type BaseController struct {
 	beego.Controller
 }
 
-func (base *BaseController) ConfigPage(page string) {
-	base.Layout = "layout.html"
-	device := base.Ctx.Input.GetData("device_type").(string)
-	base.LayoutSections = make(map[string]string)
-	base.LayoutSections["Head"] = "partial/html_head_" + device + ".html"
-	base.Data["menu_elements"] = base.GetMenu()
-	base.TplName = page
+func (CTRL *BaseController) ConfigPage(page string) {
+	CTRL.Layout = "layout.html"
+	device := CTRL.Ctx.Input.GetData("device_type").(string)
+	CTRL.LayoutSections = make(map[string]string)
+	CTRL.LayoutSections["Head"] = "partial/html_head_" + device + ".html"
+	CTRL.Data["menu_elements"] = CTRL.GetMenu()
+	CTRL.TplName = page
 }
 
-func (base *BaseController) GetDB(db ...string) orm.Ormer {
+func (CTRL *BaseController) GetDB(db ...string) orm.Ormer {
 	O := orm.NewOrm()
 	if len(db) > 0 {
 		O.Using(db[0])
@@ -29,12 +29,12 @@ func (base *BaseController) GetDB(db ...string) orm.Ormer {
 	return O
 }
 
-func (base *BaseController) GetMenu() string {
+func (CTRL *BaseController) GetMenu() string {
 	output := defaults.GetDefaultMenu()
 	return output
 }
 
-func (base *BaseController) GetContent() string {
+func (CTRL *BaseController) GetContent() string {
 	output := defaults.GetDefaultMenu()
 	return output
 }

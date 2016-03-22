@@ -11,40 +11,40 @@ type ArticleController struct {
 	BaseController
 }
 
-func (this *ArticleController) Get() {
-	ArtId, err := strconv.Atoi(this.Ctx.Input.Param(":id"))
+func (CTRL *ArticleController) Get() {
+	ArtID, err := strconv.Atoi(CTRL.Ctx.Input.Param(":id"))
 	if err != nil {
-		this.Abort("403")
+		CTRL.Abort("403")
 	}
-	db := this.GetDB("default")
-	if ArtId == 0 {
-		this.Data["form"] = models.ArticleForm{}
+	db := CTRL.GetDB("default")
+	if ArtID == 0 {
+		CTRL.Data["form"] = models.ArticleForm{}
 		var cats []*models.Category
 		db.QueryTable("category").All(&cats)
-		this.Data["Categories"] = cats
-		this.ConfigPage("article-editor.html")
+		CTRL.Data["Categories"] = cats
+		CTRL.ConfigPage("article-editor.html")
 	} else {
 		Art := new(models.Article)
-		Art.Id = ArtId
+		Art.Id = ArtID
 		db.Read(Art, "Id")
-		this.Data["Article"] = Art
-		this.ConfigPage("article.html")
+		CTRL.Data["Article"] = Art
+		CTRL.ConfigPage("article.html")
 	}
 }
 
-func (this *ArticleController) Post() {
+func (CTRL *ArticleController) Post() {
 	form := models.ArticleForm{}
 	Art := new(models.Article)
-	if err := this.ParseForm(&form); err != nil {
-		this.Abort("401")
+	if err := CTRL.ParseForm(&form); err != nil {
+		CTRL.Abort("401")
 	} else {
-		db := this.GetDB()
+		db := CTRL.GetDB()
 		if !form.Validate() {
-			this.Data["form"] = form
+			CTRL.Data["form"] = form
 			var cats []*models.Category
 			db.QueryTable("category").All(&cats)
-			this.Data["Categories"] = cats
-			this.ConfigPage("article-editor.html")
+			CTRL.Data["Categories"] = cats
+			CTRL.ConfigPage("article-editor.html")
 			for key, msg := range form.InvalidFields {
 				fmt.Println(key, msg)
 			}
@@ -53,14 +53,14 @@ func (this *ArticleController) Post() {
 			cat.Id = form.Category
 			db.Read(cat, "Id")
 			Art.Category = cat
-			user := this.Data["user"].(models.User)
+			user := CTRL.Data["user"].(models.User)
 			Art.User = &user
 			Art.Title = form.Title
 			Art.Content = form.Content
 			Art.AllowComments = form.AllowComments
 			db.Insert(Art)
-			this.Data["Article"] = Art
-			this.ConfigPage("article.html")
+			CTRL.Data["Article"] = Art
+			CTRL.ConfigPage("article.html")
 		}
 	}
 }

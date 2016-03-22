@@ -10,27 +10,27 @@ type ProfileController struct {
 	BaseController
 }
 
-func (this *ProfileController) UserPanelView() {
-	Uid := this.Ctx.Input.Param(":id")
-	if this.Ctx.Input.Param(":id") == "0" {
-		this.ConfigPage("user-profile.html")
+func (CTRL *ProfileController) UserPanelView() {
+	UID := CTRL.Ctx.Input.Param(":id")
+	if CTRL.Ctx.Input.Param(":id") == "0" {
+		CTRL.ConfigPage("user-profile.html")
 	} else {
-		Uid, err := strconv.Atoi(Uid)
+		UID, err := strconv.Atoi(UID)
 		if err != nil {
-			this.Abort("404")
+			CTRL.Abort("404")
 		}
-		this.populateProfileViewData(Uid)
-		this.ConfigPage("profile-view.html")
+		CTRL.populateProfileViewData(UID)
+		CTRL.ConfigPage("profile-view.html")
 	}
 }
 
-func (this *ProfileController) populateProfileViewData(Uid int) bool {
-	db := this.GetDB()
-	userView := models.User{Id: Uid}
+func (CTRL *ProfileController) populateProfileViewData(UID int) bool {
+	db := CTRL.GetDB()
+	userView := models.User{Id: UID}
 	db.Read(&userView, "Id")
-	Permissions := userView.Profile.GetPermissions(this.Data["user"].(models.User))
-	// TODO : populate permissions on this.Data
+	Permissions := userView.Profile.GetPermissions(CTRL.Data["user"].(models.User))
+	// TODO : populate permissions on CTRL.Data
 	_ = Permissions
-	this.Data["Profile"] = userView.Profile
+	CTRL.Data["Profile"] = userView.Profile
 	return true
 }

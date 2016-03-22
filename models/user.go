@@ -27,7 +27,7 @@ type Profile struct {
 	Age         int16
 	Lema        string
 	Description string
-	Gender      int
+	Gender      bool
 	//Socials   []*Social `orm:"reverse(many)"`
 }
 

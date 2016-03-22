@@ -8,7 +8,6 @@ import (
 	"hash"
 )
 
-// Random generate string
 func GetRandomString(n int) string {
 	const alphanum = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 	var bytes = make([]byte, n)
@@ -24,7 +23,7 @@ func EncodePassword(rawPwd string, salt string) string {
 	return hex.EncodeToString(pwd)
 }
 
-// http://code.google.com/p/go/source/browse/pbkdf2/pbkdf2.go?repo=crypto
+// PBKDF2 http://code.google.com/p/go/source/browse/pbkdf2/pbkdf2.go?repo=crypto
 func PBKDF2(password, salt []byte, iter, keyLen int, h func() hash.Hash) []byte {
 	prf := hmac.New(h, password)
 	hashLen := prf.Size()
