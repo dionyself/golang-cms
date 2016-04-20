@@ -10,6 +10,7 @@ import (
 
 type BaseController struct {
 	beego.Controller
+	db orm.Ormer
 }
 
 func (CTRL *BaseController) ConfigPage(page string) {
@@ -17,19 +18,23 @@ func (CTRL *BaseController) ConfigPage(page string) {
 	device := CTRL.Ctx.Input.GetData("device_type").(string)
 	CTRL.LayoutSections = make(map[string]string)
 	CTRL.LayoutSections["Head"] = "partial/html_head_" + device + ".html"
-	CTRL.Data["menu_elements"] = CTRL.GetMenu()
 	CTRL.TplName = page
+	_ = CTRL.GetDB()
+	// CTRL.Data["Title"] = CTRL.GetPageTitle()
+	CTRL.Data["ModuleMenu"] = CTRL.GetModuleMenu()
 }
 
 func (CTRL *BaseController) GetDB(db ...string) orm.Ormer {
-	O := orm.NewOrm()
-	if len(db) > 0 {
-		O.Using(db[0])
+	if CTRL.db == nil {
+		CTRL.db = orm.NewOrm()
 	}
-	return O
+	if len(db) > 0 {
+		CTRL.db.Using(db[0])
+	}
+	return CTRL.db
 }
 
-func (CTRL *BaseController) GetMenu() string {
+func (CTRL *BaseController) GetModuleMenu() string {
 	output := defaults.GetDefaultMenu()
 	return output
 }
