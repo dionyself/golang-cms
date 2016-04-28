@@ -14,6 +14,7 @@ import (
 )
 
 func init() {
+	//beego.BConfig.WebConfig.Session.SessionProviderConfig = `127.0.0.2:6379,100`
 	DbAddress := ""
 	DbEngine := beego.AppConfig.String("DB_Engine")
 	DbServerPort := beego.AppConfig.String("DB_ServerPort")
