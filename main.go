@@ -15,37 +15,8 @@ import (
 
 func init() {
 	//beego.BConfig.WebConfig.Session.SessionProviderConfig = `127.0.0.2:6379,100`
-	DbAddress := ""
-	DbEngine := beego.AppConfig.String("DB_Engine")
-	DbServerPort := beego.AppConfig.String("DB_ServerPort")
-	DbUsername := beego.AppConfig.String("DB_Username")
-	DbUserPassword := beego.AppConfig.String("DB_UserPassword")
-	DbServer := beego.AppConfig.String("DB_Server")
-	DbName := beego.AppConfig.String("DB_Name")
-	maxIdle := 300
-	maxConn := 300
-	if DbEngine == "mysql" {
-		orm.RegisterDriver(DbEngine, orm.DRMySQL)
-		if DbServerPort == "0" {
-			DbServerPort = "3306"
-		}
-		DbAddress = DbUsername + ":" + DbUserPassword + "@tcp(" + DbServer + ":" + DbServerPort + ")/" + DbName + "?charset=utf8"
-	} else if DbEngine == "sqlite3" {
-		orm.RegisterDriver(DbEngine, orm.DRSqlite)
-		DbAddress = "file:" + beego.AppConfig.String("DB_SqliteFile")
-	} else if DbEngine == "postgres" {
-		orm.RegisterDriver(DbEngine, orm.DRPostgres)
-		if DbServerPort == "0" {
-			DbServerPort = "5432"
-		}
-		DbAddress = "user=" + DbUsername + " password=" + DbUserPassword + " dbname=" + DbName + " host=" + DbServer + " port=" + DbServerPort + " sslmode=disable"
-	}
-	err := orm.RegisterDataBase(
-		"default",
-		DbEngine,
-		DbAddress,
-		maxIdle,
-		maxConn)
+	curr_env := beego.AppConfig.String("RunMode")
+	err := utils.DatabaseInit(curr_env)
 	if err != nil {
 		panic(err)
 	}
