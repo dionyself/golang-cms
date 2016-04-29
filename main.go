@@ -20,6 +20,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+	utils.SessionInit(curr_env)
 }
 
 func main() {
