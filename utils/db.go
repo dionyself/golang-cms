@@ -1,7 +1,7 @@
 package utils
 
 import (
-	_ "fmt"
+	"fmt"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
@@ -65,5 +65,19 @@ func DatabaseInit(env string) error {
 			maxIdle,
 			maxConn)
 	}
+
+	// DB SETUP
+	orm.Debug, _ = beego.AppConfig.Bool(dbBlk + "DatabaseDebugMode")
+	force, _ := beego.AppConfig.Bool(dbBlk + "ReCreateDatabase")
+	verbose, _ := beego.AppConfig.Bool("DB_Logging")
+	err = orm.RunSyncdb("default", force, verbose)
+	if err != nil {
+		fmt.Println(err)
+	}
+	insertDemo, _ := beego.AppConfig.Bool(dbBlk + "insertDemoData")
+	if force && insertDemo {
+		InsertDemoData()
+	}
+
 	return err
 }
