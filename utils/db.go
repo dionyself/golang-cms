@@ -67,9 +67,9 @@ func DatabaseInit(env string) error {
 	}
 
 	// DB SETUP
-	orm.Debug, _ = beego.AppConfig.Bool(dbBlk + "DatabaseDebugMode")
-	force, _ := beego.AppConfig.Bool(dbBlk + "ReCreateDatabase")
-	verbose, _ := beego.AppConfig.Bool("DB_Logging")
+	orm.Debug, _ = beego.AppConfig.Bool("DatabaseDebugMode")
+	force, _ := beego.AppConfig.Bool("ReCreateDatabase")
+	verbose, _ := beego.AppConfig.Bool("DatabaseLogging")
 	err = orm.RunSyncdb("default", force, verbose)
 	if err != nil {
 		fmt.Println(err)

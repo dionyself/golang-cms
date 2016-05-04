@@ -15,8 +15,6 @@ func SessionInit(env string) {
 		}
 	}
 
-	//sessionConfig = "{"cookieName":"gosessionid", "enableSetCookie,omitempty": true, "gclifetime":3600, "maxLifetime": 3600, "secure": false, "sessionIDHashFunc": "sha1", "sessionIDHashKey": "", "cookieLifeTime": 3600, "providerConfig": Address}"
-
 	beego.BConfig.WebConfig.Session.SessionName = beego.AppConfig.String(sessBlk + "cookieName")
 	beego.BConfig.WebConfig.Session.SessionGCMaxLifetime, _ = beego.AppConfig.Int64(sessBlk + "gclifetime")
 	beego.BConfig.WebConfig.Session.SessionProviderConfig = Address

@@ -11,6 +11,7 @@ var Cache CACHE
 type CACHE struct {
 	isEnabled bool
 	servers   map[string]redis.Conn
+	mode      string
 }
 
 func (cache *CACHE) GetString(origin string, commandName string, args ...interface{}) (reply string, found bool) {
