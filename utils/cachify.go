@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/astaxie/beego"
-	Rcache "github.com/astaxie/beego/cache"
+	Rcache "github.com/astaxie/beego/cache/redis"
 	"github.com/garyburd/redigo/redis"
 	Lcache "github.com/patrickmn/go-cache"
 )
@@ -77,8 +77,12 @@ func init() {
 	Mcache.DefaultExpiration = Lcache.DefaultExpiration
 	Mcache.servers = make(map[string]Rcache.Cache)
 	if dualmode {
-		Mcache.servers["slave"], _ = Rcache.NewCache("redis", slave)
-		Mcache.servers["master"], _ = Rcache.NewCache("redis", master)
+		masterRedis := Rcache.Cache{}
+		slaveRedis := Rcache.Cache{}
+		_ = masterRedis.StartAndGC(master)
+		_ = slaveRedis.StartAndGC(slave)
+		Mcache.servers["slave"] = slaveRedis
+		Mcache.servers["master"] = masterRedis
 	}
 	fmt.Println("loaded utils.Cache")
 }
