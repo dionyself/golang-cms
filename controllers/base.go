@@ -5,6 +5,7 @@ import (
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/orm"
 	"github.com/dionyself/golang-cms/lib/defaults"
+	"github.com/dionyself/golang-cms/utils"
 	"github.com/dionyself/gomobiledetect"
 )
 
@@ -25,9 +26,7 @@ func (CTRL *BaseController) ConfigPage(page string) {
 }
 
 func (CTRL *BaseController) GetDB(db ...string) orm.Ormer {
-	if CTRL.db == nil {
-		CTRL.db = orm.NewOrm()
-	}
+	CTRL.db = utils.Mdb.Orm
 	if len(db) > 0 {
 		CTRL.db.Using(db[0])
 	}

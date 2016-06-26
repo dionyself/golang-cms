@@ -1,12 +1,10 @@
 package utils
 
-import (
-	"github.com/astaxie/beego/orm"
-	"github.com/dionyself/golang-cms/models"
-)
+import "github.com/dionyself/golang-cms/models"
 
 func InsertDemoData() bool {
-	db := orm.NewOrm()
+	db := Mdb.Orm
+	db.Using("default")
 	cat := models.Category{Name: "Generic"}
 	user := models.User{Username: "test"}
 	salt := GetRandomString(10)

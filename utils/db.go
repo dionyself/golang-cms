@@ -10,11 +10,22 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func DatabaseInit(env string) error {
+var Mdb DB
+
+type DB struct {
+	Orm        orm.Ormer
+	replicated bool
+}
+
+func init() {
+	fmt.Println("loading utils.db")
+	env := beego.AppConfig.String("RunMode")
 	dbBlk := "databaseConfig-" + env + "::"
 	MasterAddress := ""
 	SlaveAddress := ""
+	replicated := false
 	Engine := beego.AppConfig.String("DatabaseProvider")
+	replicated, _ = beego.AppConfig.Bool(dbBlk + "replicated")
 	ServerPort := beego.AppConfig.String(dbBlk + "serverPort")
 	Username := beego.AppConfig.String(dbBlk + "databaseUser")
 	UserPassword := beego.AppConfig.String(dbBlk + "userPassword")
@@ -23,16 +34,23 @@ func DatabaseInit(env string) error {
 	Name := beego.AppConfig.String(dbBlk + "databaseName")
 	maxIdle := 300
 	maxConn := 300
+	if Engine == "" {
+		panic("Engine not configured valid options: sqlite3, mysql or postgres")
+	}
+	if Engine != "sqlite3" && MasterServer == "" {
+		panic("masterServer not configured")
+	}
+	if replicated == true && SlaveServer == "" {
+		panic("DB Replication: slaveServer not configured")
+	}
 	if Engine == "mysql" {
 		orm.RegisterDriver(Engine, orm.DRMySQL)
 		if ServerPort == "0" {
 			ServerPort = "3306"
 		}
 		MasterAddress = Username + ":" + UserPassword + "@tcp(" + MasterServer + ":" + ServerPort + ")/" + Name + "?charset=utf8"
-		if SlaveServer != "" {
+		if replicated == true {
 			SlaveAddress = Username + ":" + UserPassword + "@tcp(" + SlaveServer + ":" + ServerPort + ")/" + Name + "?charset=utf8"
-		} else {
-			SlaveAddress = MasterAddress
 		}
 	} else if Engine == "sqlite3" {
 		orm.RegisterDriver(Engine, orm.DRSqlite)
@@ -43,10 +61,8 @@ func DatabaseInit(env string) error {
 			ServerPort = "5432"
 		}
 		MasterAddress = "user=" + Username + " password=" + UserPassword + " dbname=" + Name + " host=" + MasterServer + " port=" + ServerPort + " sslmode=disable"
-		if SlaveServer != "" {
+		if replicated == true {
 			SlaveAddress = "user=" + Username + " password=" + UserPassword + " dbname=" + Name + " host=" + SlaveServer + " port=" + ServerPort + " sslmode=disable"
-		} else {
-			SlaveAddress = MasterAddress
 		}
 	}
 	err := orm.RegisterDataBase(
@@ -56,8 +72,11 @@ func DatabaseInit(env string) error {
 		maxIdle,
 		maxConn)
 	if err != nil {
-		return err
-	} else if SlaveAddress != "" {
+		panic("DB: cannot register DB on master")
+	} else if replicated == true && Engine != "sqlite3" {
+		if MasterAddress == SlaveAddress {
+			panic("DB Replication: MasterAddress and SlaveAddress are equal!")
+		}
 		err = orm.RegisterDataBase(
 			"slave",
 			Engine,
@@ -72,12 +91,24 @@ func DatabaseInit(env string) error {
 	verbose, _ := beego.AppConfig.Bool("DatabaseLogging")
 	err = orm.RunSyncdb("default", force, verbose)
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
+	} else if replicated == true && Engine != "sqlite3" {
+		err = orm.RunSyncdb("slave", force, verbose)
 	}
+	if err != nil {
+		panic(err)
+	}
+
+	Mdb.Orm = orm.NewOrm()
+	Mdb.replicated = (replicated == true && Engine != "sqlite3")
+
 	insertDemo, _ := beego.AppConfig.Bool(dbBlk + "insertDemoData")
 	if force && insertDemo {
 		InsertDemoData()
 	}
 
-	return err
+	if Mdb.replicated == true {
+		Mdb.Orm.Using("slave")
+		Mdb.Orm.Raw("start slave")
+	}
 }
