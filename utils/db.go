@@ -23,10 +23,13 @@ func init() {
 	dbBlk := "databaseConfig-" + env + "::"
 	MasterAddress := ""
 	SlaveAddress := ""
+	masterServerPort := ""
+	slaveServerPort := ""
 	replicated := false
 	Engine := beego.AppConfig.String("DatabaseProvider")
 	replicated, _ = beego.AppConfig.Bool(dbBlk + "replicated")
-	ServerPort := beego.AppConfig.String(dbBlk + "serverPort")
+	masterServerPort = beego.AppConfig.String(dbBlk + "masterServerPort")
+	slaveServerPort = beego.AppConfig.String(dbBlk + "slaveServerPort")
 	Username := beego.AppConfig.String(dbBlk + "databaseUser")
 	UserPassword := beego.AppConfig.String(dbBlk + "userPassword")
 	MasterServer := beego.AppConfig.String(dbBlk + "masterServer")
@@ -45,24 +48,30 @@ func init() {
 	}
 	if Engine == "mysql" {
 		orm.RegisterDriver(Engine, orm.DRMySQL)
-		if ServerPort == "0" {
-			ServerPort = "3306"
+		if masterServerPort == "0" {
+			masterServerPort = "3306"
 		}
-		MasterAddress = Username + ":" + UserPassword + "@tcp(" + MasterServer + ":" + ServerPort + ")/" + Name + "?charset=utf8"
+		if slaveServerPort == "0" {
+			slaveServerPort = "3306"
+		}
+		MasterAddress = Username + ":" + UserPassword + "@tcp(" + MasterServer + ":" + masterServerPort + ")/" + Name + "?charset=utf8"
 		if replicated == true {
-			SlaveAddress = Username + ":" + UserPassword + "@tcp(" + SlaveServer + ":" + ServerPort + ")/" + Name + "?charset=utf8"
+			SlaveAddress = Username + ":" + UserPassword + "@tcp(" + SlaveServer + ":" + slaveServerPort + ")/" + Name + "?charset=utf8"
 		}
 	} else if Engine == "sqlite3" {
 		orm.RegisterDriver(Engine, orm.DRSqlite)
 		MasterAddress = "file:" + beego.AppConfig.String(dbBlk+"sqliteFile")
 	} else if Engine == "postgres" {
 		orm.RegisterDriver(Engine, orm.DRPostgres)
-		if ServerPort == "0" {
-			ServerPort = "5432"
+		if masterServerPort == "0" {
+			masterServerPort = "5432"
 		}
-		MasterAddress = "user=" + Username + " password=" + UserPassword + " dbname=" + Name + " host=" + MasterServer + " port=" + ServerPort + " sslmode=disable"
+		if slaveServerPort == "0" {
+			slaveServerPort = "5432"
+		}
+		MasterAddress = "user=" + Username + " password=" + UserPassword + " dbname=" + Name + " host=" + MasterServer + " port=" + masterServerPort + " sslmode=disable"
 		if replicated == true {
-			SlaveAddress = "user=" + Username + " password=" + UserPassword + " dbname=" + Name + " host=" + SlaveServer + " port=" + ServerPort + " sslmode=disable"
+			SlaveAddress = "user=" + Username + " password=" + UserPassword + " dbname=" + Name + " host=" + SlaveServer + " port=" + slaveServerPort + " sslmode=disable"
 		}
 	}
 	err := orm.RegisterDataBase(
@@ -106,7 +115,8 @@ func init() {
 	if force && insertDemo {
 		InsertDemoData()
 	}
-
+	LoadTemplates()
+	SaveTemplates()
 	if Mdb.replicated == true {
 		Mdb.Orm.Using("slave")
 		Mdb.Orm.Raw("start slave")

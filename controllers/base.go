@@ -15,11 +15,13 @@ type BaseController struct {
 }
 
 func (CTRL *BaseController) ConfigPage(page string) {
-	CTRL.Layout = "layout.html"
+	theme := utils.GetActiveTheme(false)
+	CTRL.Layout = theme[0] + "/" + "layout.html"
 	device := CTRL.Ctx.Input.GetData("device_type").(string)
 	CTRL.LayoutSections = make(map[string]string)
-	CTRL.LayoutSections["Head"] = "partial/html_head_" + device + ".html"
-	CTRL.TplName = page
+	CTRL.LayoutSections["Head"] = theme[0] + "/" + "partial/html_head_" + device + ".html"
+	CTRL.TplName = theme[0] + "/" + page
+	CTRL.Data["Style"] = theme[1]
 	_ = CTRL.GetDB()
 	// CTRL.Data["Title"] = CTRL.GetPageTitle()
 	CTRL.Data["ModuleMenu"] = CTRL.GetModuleMenu()
