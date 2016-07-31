@@ -10,8 +10,10 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-var Mdb DB
+// MainDatabase main db
+var MainDatabase DB
 
+// DB ...
 type DB struct {
 	Orm        orm.Ormer
 	replicated bool
@@ -108,8 +110,8 @@ func init() {
 		panic(err)
 	}
 
-	Mdb.Orm = orm.NewOrm()
-	Mdb.replicated = (replicated == true && Engine != "sqlite3")
+	MainDatabase.Orm = orm.NewOrm()
+	MainDatabase.replicated = (replicated == true && Engine != "sqlite3")
 
 	insertDemo, _ := beego.AppConfig.Bool(dbBlk + "insertDemoData")
 	if force && insertDemo {
@@ -117,8 +119,8 @@ func init() {
 	}
 	LoadTemplates()
 	SaveTemplates()
-	if Mdb.replicated == true {
-		Mdb.Orm.Using("slave")
-		Mdb.Orm.Raw("start slave")
+	if MainDatabase.replicated == true {
+		MainDatabase.Orm.Using("slave")
+		MainDatabase.Orm.Raw("start slave")
 	}
 }

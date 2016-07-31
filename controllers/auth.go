@@ -13,15 +13,17 @@ import (
 
 var sessionName = beego.AppConfig.String("SessionName")
 
+// LoginController ...
 type LoginController struct {
 	BaseController
 }
 
+// LoginView ...
 func (CTRL *LoginController) LoginView() {
 	CTRL.ConfigPage("login.html")
-
 }
 
+// Login authenticates the user
 func (CTRL *LoginController) Login() {
 	username := CTRL.GetString("username")
 	password := CTRL.GetString("password")
@@ -41,15 +43,18 @@ func (CTRL *LoginController) Login() {
 
 }
 
+// Logout ...
 func (CTRL *LoginController) Logout() {
 	CTRL.DelSession(sessionName)
 	CTRL.Redirect("/login", 302)
 }
 
+// RegisterView displays register form
 func (CTRL *LoginController) RegisterView() {
 	CTRL.ConfigPage("register.html")
 }
 
+// Register the user
 func (CTRL *LoginController) Register() {
 	form := models.RegisterForm{}
 	if err := CTRL.ParseForm(&form); err != nil {
@@ -87,6 +92,7 @@ func (CTRL *LoginController) Register() {
 	}
 }
 
+// HasUser checks if user exists in db
 func HasUser(user *models.User, username string) bool {
 	var err error
 	qs := orm.NewOrm()
@@ -98,6 +104,7 @@ func HasUser(user *models.User, username string) bool {
 	return false
 }
 
+// VerifyPassword checks if pwd is correct
 func VerifyPassword(rawPwd, encodedPwd string) bool {
 	var salt, encoded string
 	salt = encodedPwd[:10]
@@ -105,8 +112,8 @@ func VerifyPassword(rawPwd, encodedPwd string) bool {
 	return utils.EncodePassword(rawPwd, salt) == encoded
 }
 
+// VerifyUser virifies user credentials
 func VerifyUser(user *models.User, username, password string) (success bool) {
-	// search user by username or email
 	if HasUser(user, username) == false {
 		return
 	}
@@ -116,6 +123,7 @@ func VerifyUser(user *models.User, username, password string) (success bool) {
 	return
 }
 
+// AuthRequest "filter" to limit request based on sessionid
 var AuthRequest = func(ctx *context.Context) {
 	uid, ok := ctx.Input.Session(sessionName).(int)
 	if !ok && ctx.Input.URI() != "/login" && ctx.Input.URI() != "/register" {

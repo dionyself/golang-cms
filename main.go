@@ -11,9 +11,8 @@ import (
 )
 
 func init() {
-	//beego.BConfig.WebConfig.Session.SessionProviderConfig = `127.0.0.2:6379,100`
-	currEnv := beego.AppConfig.String("RunMode")
-	utils.SessionInit(currEnv)
+	currentEnvironment := beego.AppConfig.String("RunMode")
+	utils.SessionInit(currentEnvironment)
 }
 
 func main() {

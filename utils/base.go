@@ -1,9 +1,5 @@
 package utils
 
-import (
-	_ "fmt"
-)
-
 /*
 func Containss(slice []string, item string) bool {
 	set := make(map[string]struct{}, len(slice))
@@ -16,9 +12,10 @@ func Containss(slice []string, item string) bool {
 }
 */
 
-func Contains(s []string, e string) bool {
-	for _, a := range s {
-		if a == e {
+// Contains Verify if slice contains x string
+func Contains(stringSlice []string, stringToSearch string) bool {
+	for _, stringElement := range stringSlice {
+		if stringElement == stringToSearch {
 			return true
 		}
 	}

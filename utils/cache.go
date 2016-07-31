@@ -1,30 +1,32 @@
 package utils
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/astaxie/beego"
-	Rcache "github.com/astaxie/beego/cache/redis"
+	redisCache "github.com/astaxie/beego/cache/redis"
 	"github.com/garyburd/redigo/redis"
-	Lcache "github.com/patrickmn/go-cache"
+	internalCache "github.com/patrickmn/go-cache"
 )
 
-var Mcache CACHE
+// MainCache is global cache
+var MainCache CACHE
 
+// CACHE main ...
 type CACHE struct {
 	isEnabled         bool
-	servers           map[string]Rcache.Cache
-	internal          *Lcache.Cache
+	servers           map[string]redisCache.Cache
+	internal          *internalCache.Cache
 	DefaultExpiration time.Duration
 	dualmode          bool
 }
 
-func (cache *CACHE) GetString(key string, expire int64) (string, bool) {
+// GetString bring string from cache, expiration time in seconds
+func (cache *CACHE) GetString(cacheKey string, expirationTime int64) (string, bool) {
 	if !cache.isEnabled {
 		return "", false
 	}
-	payload, found := cache.internal.Get(key)
+	payload, found := cache.internal.Get(cacheKey)
 	if found {
 		result, err := redis.String(payload, nil)
 		if err == nil {
@@ -33,29 +35,30 @@ func (cache *CACHE) GetString(key string, expire int64) (string, bool) {
 	}
 	if cache.dualmode {
 		server := cache.servers["slave"]
-		result, err := redis.String(server.Get(key), nil)
+		result, err := redis.String(server.Get(cacheKey), nil)
 		if err == nil {
-			cache.Set(key, result, expire)
+			cache.Set(cacheKey, result, expirationTime)
 			return result, true
 		}
 	}
 	return "", false
 }
 
-func (cache *CACHE) Set(key string, value interface{}, expire int64) bool {
+// Set any value to cache, expiration time in seconds
+func (cache *CACHE) Set(cacheKey string, value interface{}, expirationTime int64) bool {
 	if !cache.isEnabled {
 		return false
 	}
 	duration := cache.DefaultExpiration
-	if expire != 0 {
-		duration = time.Duration(expire) * time.Second
+	if expirationTime != 0 {
+		duration = time.Duration(expirationTime) * time.Second
 	} else {
 		duration = cache.DefaultExpiration
 	}
-	cache.internal.Set(key, value, duration)
+	cache.internal.Set(cacheKey, value, duration)
 	if cache.dualmode {
 		server := cache.servers["master"]
-		err := server.Put(key, value, duration)
+		err := server.Put(cacheKey, value, duration)
 		if err == nil {
 			return true
 		}
@@ -72,17 +75,16 @@ func init() {
 	slave := beego.AppConfig.String(cacheBlk + "redisSlaveServer")
 	flushInterval, _ := beego.AppConfig.Int64(cacheBlk + "flushInterval")
 	defaultExpiry, _ := beego.AppConfig.Int64(cacheBlk + "defaultExpiry")
-	Mcache = CACHE{isEnabled: isEnable, dualmode: dualmode}
-	Mcache.internal = Lcache.New(time.Duration(defaultExpiry)*time.Second, time.Duration(flushInterval)*time.Second)
-	Mcache.DefaultExpiration = Lcache.DefaultExpiration
-	Mcache.servers = make(map[string]Rcache.Cache)
+	MainCache = CACHE{isEnabled: isEnable, dualmode: dualmode}
+	MainCache.internal = internalCache.New(time.Duration(defaultExpiry)*time.Second, time.Duration(flushInterval)*time.Second)
+	MainCache.DefaultExpiration = internalCache.DefaultExpiration
+	MainCache.servers = make(map[string]redisCache.Cache)
 	if dualmode {
-		masterRedis := Rcache.Cache{}
-		slaveRedis := Rcache.Cache{}
+		masterRedis := redisCache.Cache{}
+		slaveRedis := redisCache.Cache{}
 		_ = masterRedis.StartAndGC(master)
 		_ = slaveRedis.StartAndGC(slave)
-		Mcache.servers["slave"] = slaveRedis
-		Mcache.servers["master"] = masterRedis
+		MainCache.servers["slave"] = slaveRedis
+		MainCache.servers["master"] = masterRedis
 	}
-	fmt.Println("loaded utils.Cache")
 }

@@ -8,19 +8,21 @@ import (
 	"hash"
 )
 
-func GetRandomString(n int) string {
+// GetRandomString ...
+func GetRandomString(amount int) (randomString string) {
 	const alphanum = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-	var bytes = make([]byte, n)
+	var bytes = make([]byte, amount)
 	rand.Read(bytes)
-	for i, b := range bytes {
-		bytes[i] = alphanum[b%byte(len(alphanum))]
+	for index, _byte := range bytes {
+		bytes[index] = alphanum[_byte%byte(len(alphanum))]
 	}
 	return string(bytes)
 }
 
-func EncodePassword(rawPwd string, salt string) string {
-	pwd := PBKDF2([]byte(rawPwd), []byte(salt), 10000, 50, sha256.New)
-	return hex.EncodeToString(pwd)
+// EncodePassword ...
+func EncodePassword(rawPassword string, salt string) (encodedPassword string) {
+	password := PBKDF2([]byte(rawPassword), []byte(salt), 10000, 50, sha256.New)
+	return hex.EncodeToString(password)
 }
 
 // PBKDF2 http://code.google.com/p/go/source/browse/pbkdf2/pbkdf2.go?repo=crypto

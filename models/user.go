@@ -6,6 +6,7 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
+// User model
 type User struct {
 	Id          int        `orm:"column(id);auto"`
 	Username    string     `orm:"column(username);size(50);unique"`
@@ -19,6 +20,7 @@ type User struct {
 	Permissions string
 }
 
+// Profile model
 type Profile struct {
 	Id          int
 	User        *User `orm:"reverse(one)"`
@@ -31,11 +33,13 @@ type Profile struct {
 	//Socials   []*Social `orm:"reverse(many)"`
 }
 
+// GetPermissions get user permissions data
 func (*Profile) GetPermissions(user User) string {
 	return user.Permissions
 }
+
+// registering all modules
 func init() {
-	// Need to register model in init
 	orm.RegisterModel(
 		new(User),
 		new(Profile),

@@ -1,11 +1,13 @@
 package modules
 
+// ModuleConfig ...
 type ModuleConfig struct {
 	Name   string
 	Menu   string
 	weight int
 }
 
+// Modules ...
 var Modules []ModuleConfig
 
 func init() {

@@ -4,6 +4,7 @@ import (
 	"time"
 )
 
+// ArticleLike model
 type ArticleLike struct {
 	Id         int       `orm:"column(id);auto"`
 	User       *User     `orm:"rel(fk)"`
@@ -11,6 +12,7 @@ type ArticleLike struct {
 	Article    *Article  `orm:"rel(fk)"`
 }
 
+// CommentLike model
 type CommentLike struct {
 	Id         int             `orm:"column(id);auto"`
 	User       *User           `orm:"rel(fk)"`

@@ -5,10 +5,12 @@ import (
 	"github.com/astaxie/beego/validation"
 )
 
+// BaseForm ...
 type BaseForm struct {
 	InvalidFields map[string]string `form:"-"`
 }
 
+// Validate form data
 func (form *BaseForm) Validate(data interface{}) bool {
 	valid := validation.Validation{}
 	b, err := valid.Valid(data)

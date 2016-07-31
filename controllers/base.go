@@ -9,11 +9,13 @@ import (
 	"github.com/dionyself/gomobiledetect"
 )
 
+// BaseController Extendable
 type BaseController struct {
 	beego.Controller
 	db orm.Ormer
 }
 
+// ConfigPage receives template name and makes basic config to render it
 func (CTRL *BaseController) ConfigPage(page string) {
 	theme := utils.GetActiveTheme(false)
 	CTRL.Layout = theme[0] + "/" + "layout.html"
@@ -23,28 +25,31 @@ func (CTRL *BaseController) ConfigPage(page string) {
 	CTRL.TplName = theme[0] + "/" + page
 	CTRL.Data["Style"] = theme[1]
 	_ = CTRL.GetDB()
-	// CTRL.Data["Title"] = CTRL.GetPageTitle()
 	CTRL.Data["ModuleMenu"] = CTRL.GetModuleMenu()
 }
 
+// GetDB set the orm connector into our controller
 func (CTRL *BaseController) GetDB(db ...string) orm.Ormer {
-	CTRL.db = utils.Mdb.Orm
+	CTRL.db = utils.MainDatabase.Orm
 	if len(db) > 0 {
 		CTRL.db.Using(db[0])
 	}
 	return CTRL.db
 }
 
+// GetModuleMenu retrieves menu
 func (CTRL *BaseController) GetModuleMenu() string {
 	output := defaults.GetDefaultMenu()
 	return output
 }
 
+// GetContent gets contents
 func (CTRL *BaseController) GetContent() string {
 	output := defaults.GetDefaultMenu()
 	return output
 }
 
+// DetectUserAgent detects device type and set it into a cookie
 var DetectUserAgent = func(ctx *context.Context) {
 	deviceDetector := mobiledetect.NewMobileDetect(ctx.Request, nil)
 	ctx.Request.ParseForm()

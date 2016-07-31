@@ -4,6 +4,7 @@ import (
 	"time"
 )
 
+// Template model
 type Template struct {
 	Id         int       `orm:"column(id);auto"`
 	Name       string    `orm:"column(name);size(50);unique"`
@@ -12,6 +13,7 @@ type Template struct {
 	CreateTime time.Time `orm:"column(create_time);type(timestamp);auto_now_add"`
 }
 
+// Style model
 type Style struct {
 	Id         int       `orm:"column(id);auto"`
 	Name       string    `orm:"column(name);size(50);unique"`

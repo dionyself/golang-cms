@@ -2,7 +2,7 @@ package defaults
 
 import (
 	"github.com/astaxie/beego"
-	"github.com/dionyself/golang-cms/lib/defaults/modules" // refs
+	"github.com/dionyself/golang-cms/lib/defaults/modules"
 )
 
 // GetDefaultMenu get menu

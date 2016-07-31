@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
+// SessionInit ...
 func SessionInit(env string) {
 	sessBlk := "sessionConfig-" + env + "::"
 	provider := beego.AppConfig.String("SessionProvider")

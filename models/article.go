@@ -4,6 +4,7 @@ import (
 	"time"
 )
 
+// Article model articles in db
 type Article struct {
 	Id             int       `orm:"column(id);auto"`
 	User           *User     `orm:"rel(fk)"`
@@ -18,6 +19,7 @@ type Article struct {
 	Likes          []*ArticleLike    `orm:"reverse(many)"`
 }
 
+// ArticleComment model articles_comments in db
 type ArticleComment struct {
 	Id      int            `orm:"column(id);auto"`
 	User    *User          `orm:"rel(fk)"`
@@ -25,6 +27,7 @@ type ArticleComment struct {
 	Likes   []*CommentLike `orm:"reverse(many)"`
 }
 
+// Category model categories in db
 type Category struct {
 	Id       int        `orm:"column(id);auto"`
 	Name     string     `orm:"column(name);size(128)"`

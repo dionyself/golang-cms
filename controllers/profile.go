@@ -6,10 +6,12 @@ import (
 	"github.com/dionyself/golang-cms/models"
 )
 
+// ProfileController for users
 type ProfileController struct {
 	BaseController
 }
 
+// UserPanelView  Display user's homepage
 func (CTRL *ProfileController) UserPanelView() {
 	UID := CTRL.Ctx.Input.Param(":id")
 	if CTRL.Ctx.Input.Param(":id") == "0" {
@@ -24,6 +26,7 @@ func (CTRL *ProfileController) UserPanelView() {
 	}
 }
 
+// populateProfileViewData Displays profile by id
 func (CTRL *ProfileController) populateProfileViewData(UID int) bool {
 	db := CTRL.GetDB()
 	userView := models.User{Id: UID}

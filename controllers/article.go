@@ -7,10 +7,12 @@ import (
 	"github.com/dionyself/golang-cms/models"
 )
 
+// ArticleController ...
 type ArticleController struct {
 	BaseController
 }
 
+// Get Displays Article by id
 func (CTRL *ArticleController) Get() {
 	ArtID, err := strconv.Atoi(CTRL.Ctx.Input.Param(":id"))
 	if err != nil {
@@ -32,6 +34,7 @@ func (CTRL *ArticleController) Get() {
 	}
 }
 
+// Post create/update article
 func (CTRL *ArticleController) Post() {
 	form := models.ArticleForm{}
 	Art := new(models.Article)

@@ -11,12 +11,13 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// Templates map["theme_folder"]["style1", "style2" ...]
 var Templates map[string][]string
 
-
+// GetActiveTheme gets active theme (cached)
 func GetActiveTheme(forceDatabase bool) []string{
 	theme :=  []string{"default", "default"}
-	if value, err := Mcache.GetString("activeTheme", 60);err != false{
+	if value, err := MainCache.GetString("activeTheme", 60);err != false{
 		if ! forceDatabase{
 		    return strings.Split(value, ":")
 	  }
@@ -24,7 +25,7 @@ func GetActiveTheme(forceDatabase bool) []string{
 	}
 	template := new(models.Template)
 	template.Active = true
-	err := Mdb.Orm.Read(template, "Active")
+	err := MainDatabase.Orm.Read(template, "Active")
 	if err == nil {
 		theme[0] = template.Name
 		for _, style := range template.Style{
@@ -32,51 +33,53 @@ func GetActiveTheme(forceDatabase bool) []string{
 				theme[1] = style.Name
 			}
 		}
-		go Mcache.Set("activeTheme", strings.Join(theme, ":"), 60)
+		go MainCache.Set("activeTheme", strings.Join(theme, ":"), 60)
 	}
 	return theme
 }
 
+// SetActiveTheme ...
 func SetActiveTheme(themeToSet []string) bool{
 	  activeTheme := GetActiveTheme(true)
     template := new(models.Template)
 		template.Name = themeToSet[0]
-		if Mdb.Orm.Read(&template, "Name") == nil{
+		if MainDatabase.Orm.Read(&template, "Name") == nil{
 			template.Active = true
-			Mdb.Orm.Begin()
-			if _, err := Mdb.Orm.Update(template, "Active"); err == nil{
+			MainDatabase.Orm.Begin()
+			if _, err := MainDatabase.Orm.Update(template, "Active"); err == nil{
 				toDeactivate := new(models.Template)
 				toDeactivate.Name = activeTheme[0]
 				toDeactivate.Active = true
-				if Mdb.Orm.Read(&toDeactivate, "Name", "Active") == nil{
+				if MainDatabase.Orm.Read(&toDeactivate, "Name", "Active") == nil{
 					toDeactivate.Active = false
-					if _, err := Mdb.Orm.Update(&toDeactivate, "Active");err!=nil{
-						Mdb.Orm.Rollback()
+					if _, err := MainDatabase.Orm.Update(&toDeactivate, "Active");err!=nil{
+						MainDatabase.Orm.Rollback()
 						return false
 					}
 				}
 			}else{
-				Mdb.Orm.Rollback()
+				MainDatabase.Orm.Rollback()
 				return false
 			}
-			if err := Mdb.Orm.Commit(); err==nil{
+			if err := MainDatabase.Orm.Commit(); err==nil{
 				for _, style := range template.Style{
 					if style.Name == themeToSet[1]{
 						style.Active = true
 					}else{
 						style.Active = false
 					}
-					Mdb.Orm.Update(&style, "Active")
+					MainDatabase.Orm.Update(&style, "Active")
 				}
-				go Mcache.Set("activeTheme", strings.Join(themeToSet, ":"), 60)
+				go MainCache.Set("activeTheme", strings.Join(themeToSet, ":"), 60)
 				return true
 			}
 		}
 		return false
 }
 
+// SaveTemplates save loaded templates into db, thi usually runs on startup
 func SaveTemplates(){
-	db := Mdb.Orm
+	db := MainDatabase.Orm
 	db.Using("default")
 	var templates []*models.Template
 	db.QueryTable("template").All(&templates)
@@ -135,6 +138,7 @@ func SaveTemplates(){
 	}
 }
 
+// LoadTemplates this usually runs on startup
 func LoadTemplates() {
 	templates, _ := ioutil.ReadDir("./views/")
 	Templates = make(map[string][]string)

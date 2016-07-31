@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego/validation"
 )
 
+// RegisterForm ...
 type RegisterForm struct {
 	BaseForm
 	Name          string            `form:"name" valid:"Required;"`
@@ -15,6 +16,7 @@ type RegisterForm struct {
 	InvalidFields map[string]string `form:"-"`
 }
 
+// Validate RegisterForm
 func (form *RegisterForm) Validate() bool {
 	valid := form.BaseForm.Validate(form)
 	if valid != true {
@@ -23,6 +25,7 @@ func (form *RegisterForm) Validate() bool {
 	return valid
 }
 
+// Valid check if RegisterForm is valid
 func (form *RegisterForm) Valid(v *validation.Validation) {
 	// Check if passwords of two times are same.
 	if form.Password != form.PasswordRe {
@@ -31,6 +34,7 @@ func (form *RegisterForm) Valid(v *validation.Validation) {
 	}
 }
 
+// ArticleForm ...
 type ArticleForm struct {
 	BaseForm
 	Id            int               `form:"-"`
@@ -44,6 +48,7 @@ type ArticleForm struct {
 	InvalidFields map[string]string `form:"-"`
 }
 
+// Validate ArticleForm
 func (form *ArticleForm) Validate() bool {
 	valid := form.BaseForm.Validate(form)
 	if valid != true {
@@ -52,6 +57,7 @@ func (form *ArticleForm) Validate() bool {
 	return valid
 }
 
+// Valid checks if ArticleForm is valid
 func (form *ArticleForm) Valid(v *validation.Validation) {
 	if form.Category < 0 {
 		v.SetError("Category", "Invalid category")
