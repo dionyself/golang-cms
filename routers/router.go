@@ -3,11 +3,16 @@ package routers
 import (
 	"github.com/astaxie/beego"
 	"github.com/dionyself/golang-cms/controllers"
+	"github.com/dionyself/golang-cms/utils"
 )
 
 func init() {
-	beego.SetStaticPath("/static", "static/")
-	//beego.SetStaticPath("/tpl/css", utils.GetActiveStylesPath())
+	for template, styles := range utils.Templates {
+		for _, style := range styles {
+			// beego.BConfig.WebConfig.StaticDir
+			beego.SetStaticPath("/static/"+template+"/"+style, "views/"+template+"/styles/"+style)
+		}
+	}
 
 	// guests request
 	beego.Router("/", &controllers.IndexController{})
