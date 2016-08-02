@@ -1,12 +1,12 @@
 package models
 
 import (
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/validation"
 )
 
 // RegisterForm ...
 type RegisterForm struct {
-	BaseForm
 	Name          string            `form:"name" valid:"Required;"`
 	Email         string            `form:"email" valid:"Required;"`
 	Username      string            `form:"username" valid:"Required;AlphaNumeric;MinSize(4);MaxSize(300)"`
@@ -16,13 +16,25 @@ type RegisterForm struct {
 	InvalidFields map[string]string `form:"-"`
 }
 
-// Validate RegisterForm
+// Validate form data
 func (form *RegisterForm) Validate() bool {
-	valid := form.BaseForm.Validate(form)
-	if valid != true {
-		form.InvalidFields = form.BaseForm.InvalidFields
+	validator := validation.Validation{}
+	isValid := false
+	var err error
+	if isValid, err = validator.Valid(form); err != nil {
+		beego.Error(err)
+	} else {
+		if !isValid {
+			if form.InvalidFields == nil {
+				form.InvalidFields = make(map[string]string, len(validator.Errors))
+			}
+			for _, err := range validator.Errors {
+				beego.Debug(err.Key, err.Message)
+				form.InvalidFields[err.Key] = err.Message
+			}
+		}
 	}
-	return valid
+	return isValid
 }
 
 // Valid check if RegisterForm is valid
@@ -36,7 +48,6 @@ func (form *RegisterForm) Valid(v *validation.Validation) {
 
 // ArticleForm ...
 type ArticleForm struct {
-	BaseForm
 	Id            int               `form:"-"`
 	Title         string            `form:"title" valid:"Required;MinSize(4);MaxSize(300)"`
 	Category      int               `form:"category"`
@@ -48,13 +59,25 @@ type ArticleForm struct {
 	InvalidFields map[string]string `form:"-"`
 }
 
-// Validate ArticleForm
+// Validate form data
 func (form *ArticleForm) Validate() bool {
-	valid := form.BaseForm.Validate(form)
-	if valid != true {
-		form.InvalidFields = form.BaseForm.InvalidFields
+	validator := validation.Validation{}
+	isValid := false
+	var err error
+	if isValid, err = validator.Valid(form); err != nil {
+		beego.Error(err)
+	} else {
+		if !isValid {
+			if form.InvalidFields == nil {
+				form.InvalidFields = make(map[string]string, len(validator.Errors))
+			}
+			for _, err := range validator.Errors {
+				beego.Debug(err.Key, err.Message)
+				form.InvalidFields[err.Key] = err.Message
+			}
+		}
 	}
-	return valid
+	return isValid
 }
 
 // Valid checks if ArticleForm is valid

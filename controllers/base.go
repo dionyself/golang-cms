@@ -23,6 +23,7 @@ func (CTRL *BaseController) ConfigPage(page string) {
 	CTRL.LayoutSections = make(map[string]string)
 	CTRL.LayoutSections["Head"] = theme[0] + "/" + "partial/html_head_" + device + ".html"
 	CTRL.TplName = theme[0] + "/" + page
+	CTRL.Data["Theme"] = theme[0]
 	CTRL.Data["Style"] = theme[1]
 	_ = CTRL.GetDB()
 	CTRL.Data["ModuleMenu"] = CTRL.GetModuleMenu()
