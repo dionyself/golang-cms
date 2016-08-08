@@ -21,9 +21,9 @@ func (CTRL *ArticleController) Get() {
 	db := CTRL.GetDB("default")
 	if ArtID == 0 {
 		CTRL.Data["form"] = models.ArticleForm{}
-		var cats []*models.Category
-		db.QueryTable("category").All(&cats)
-		CTRL.Data["Categories"] = cats
+		cats := new([]*models.Category)
+		db.QueryTable("category").All(cats)
+		CTRL.Data["Categories"] = *cats
 		CTRL.ConfigPage("article-editor.html")
 	} else {
 		Art := new(models.Article)
@@ -36,16 +36,16 @@ func (CTRL *ArticleController) Get() {
 
 // Post create/update article
 func (CTRL *ArticleController) Post() {
-	form := models.ArticleForm{}
+	form := new(models.ArticleForm)
 	Art := new(models.Article)
-	if err := CTRL.ParseForm(&form); err != nil {
+	if err := CTRL.ParseForm(form); err != nil {
 		CTRL.Abort("401")
 	} else {
 		db := CTRL.GetDB()
 		if !form.Validate() {
 			CTRL.Data["form"] = form
-			var cats []*models.Category
-			db.QueryTable("category").All(&cats)
+			cats := new([]*models.Category)
+			db.QueryTable("category").All(cats)
 			CTRL.Data["Categories"] = cats
 			CTRL.ConfigPage("article-editor.html")
 			for key, msg := range form.InvalidFields {

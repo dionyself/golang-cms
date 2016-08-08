@@ -56,8 +56,8 @@ func (CTRL *LoginController) RegisterView() {
 
 // Register the user
 func (CTRL *LoginController) Register() {
-	form := models.RegisterForm{}
-	if err := CTRL.ParseForm(&form); err != nil {
+	form := new(models.RegisterForm)
+	if err := CTRL.ParseForm(form); err != nil {
 		CTRL.Abort("401")
 	}
 
