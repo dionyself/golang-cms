@@ -1,6 +1,9 @@
-package utils
+package db
 
-import "github.com/dionyself/golang-cms/models"
+import (
+	"github.com/dionyself/golang-cms/models"
+ "github.com/dionyself/golang-cms/utils"
+	)
 
 // InsertDemoData insert demo data in database if ReCreateDatabase is true
 func InsertDemoData() bool {
@@ -8,8 +11,8 @@ func InsertDemoData() bool {
 	db.Using("default")
 	category := models.Category{Name: "Generic"}
 	user := models.User{Username: "test"}
-	salt := GetRandomString(10)
-	encodedPassword := salt + "$" + EncodePassword("test", salt)
+	salt := utils.GetRandomString(10)
+	encodedPassword := salt + "$" + utils.EncodePassword("test", salt)
 	profile := new(models.Profile)
 	profile.Age = 30
 	profile.Name = "Test Rosario"

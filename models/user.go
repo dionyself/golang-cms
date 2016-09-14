@@ -49,5 +49,7 @@ func init() {
 		new(ArticleLike),
 		new(CommentLike),
 		new(Template),
-		new(Style))
+		new(Style),
+		new(Image),
+	)
 }

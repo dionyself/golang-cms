@@ -1,4 +1,4 @@
-package utils
+package db
 
 import (
 	"fmt"
@@ -117,8 +117,7 @@ func init() {
 	if force && insertDemo {
 		InsertDemoData()
 	}
-	LoadTemplates()
-	SaveTemplates()
+
 	if MainDatabase.replicated == true {
 		MainDatabase.Orm.Using("slave")
 		MainDatabase.Orm.Raw("start slave")

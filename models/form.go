@@ -23,3 +23,16 @@ type ArticleForm struct {
 	AllowComments bool              `form:"allow-comments" valid:"Required"`
 	InvalidFields map[string]string `form:"-"`
 }
+
+// ImageForm ...
+type ImageForm struct {
+	Name          string            `form:"name" valid:"Required;"`
+	User          int               `form:"user" valid:"Required;Numeric"`
+	Target        string            `form:"target" valid:"Required;"`
+	PivoteX       int               `form:"pivotex" valid:"Required;Numeric"`
+	PivoteY       int               `form:"pivotey" valid:"Required;Numeric"`
+	ImageType     string            `form:"name" valid:"Required;"`
+	Description   string            `form:"description" valid:"Required;AlphaNumeric;MinSize(4);MaxSize(300)"`
+	File          []byte            `form:"-"`
+	InvalidFields map[string]string `form:"-"`
+}

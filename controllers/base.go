@@ -4,8 +4,9 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/orm"
-	"github.com/dionyself/golang-cms/lib/defaults"
-	"github.com/dionyself/golang-cms/utils"
+	"github.com/dionyself/golang-cms/core/defaults"
+	database "github.com/dionyself/golang-cms/core/lib/db"
+	"github.com/dionyself/golang-cms/core/template"
 	"github.com/dionyself/gomobiledetect"
 )
 
@@ -17,7 +18,7 @@ type BaseController struct {
 
 // ConfigPage receives template name and makes basic config to render it
 func (CTRL *BaseController) ConfigPage(page string) {
-	theme := utils.GetActiveTheme(false)
+	theme := template.GetActiveTheme(false)
 	CTRL.Layout = theme[0] + "/" + "layout.html"
 	device := CTRL.Ctx.Input.GetData("device_type").(string)
 	CTRL.LayoutSections = make(map[string]string)
@@ -31,7 +32,7 @@ func (CTRL *BaseController) ConfigPage(page string) {
 
 // GetDB set the orm connector into our controller
 func (CTRL *BaseController) GetDB(db ...string) orm.Ormer {
-	CTRL.db = utils.MainDatabase.Orm
+	CTRL.db = database.MainDatabase.Orm
 	if len(db) > 0 {
 		CTRL.db.Using(db[0])
 	}

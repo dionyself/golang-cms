@@ -3,11 +3,11 @@ package routers
 import (
 	"github.com/astaxie/beego"
 	"github.com/dionyself/golang-cms/controllers"
-	"github.com/dionyself/golang-cms/utils"
+	"github.com/dionyself/golang-cms/core/template"
 )
 
 func init() {
-	for template, styles := range utils.Templates {
+	for template, styles := range template.Templates {
 		for _, style := range styles {
 			// beego.BConfig.WebConfig.StaticDir
 			beego.SetStaticPath("/static/"+template+"/"+style, "views/"+template+"/styles/"+style)
@@ -28,6 +28,7 @@ func init() {
 	beego.InsertFilter("/profile/:id:int/show", beego.BeforeRouter, controllers.AuthRequest)
 	beego.InsertFilter("/article/:id:int/edit", beego.BeforeRouter, controllers.AuthRequest)
 	beego.InsertFilter("/article/:id:int/comment", beego.BeforeRouter, controllers.AuthRequest)
+	beego.InsertFilter("/ajax/image/:id:int/edit", beego.BeforeRouter, controllers.AuthRequest)
 	beego.InsertFilter("/*", beego.BeforeExec, controllers.DetectUserAgent)
 	beego.InsertFilter("/", beego.BeforeExec, controllers.DetectUserAgent)
 }
