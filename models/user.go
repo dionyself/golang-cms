@@ -51,5 +51,6 @@ func init() {
 		new(Template),
 		new(Style),
 		new(Image),
+		new(Block),
 	)
 }

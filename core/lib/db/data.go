@@ -28,5 +28,8 @@ func InsertDemoData() bool {
 	db.Insert(&user)
 	db.Insert(&category)
 	db.Insert(&article)
+  htmlblock := models.Block{Name: "ert", Type: "html"}
+  db.Insert(&htmlblock)
+
 	return true
 }

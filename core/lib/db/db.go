@@ -16,7 +16,7 @@ var MainDatabase DB
 // DB ...
 type DB struct {
 	Orm        orm.Ormer
-	replicated bool
+	Replicated bool
 }
 
 func init() {
@@ -111,14 +111,14 @@ func init() {
 	}
 
 	MainDatabase.Orm = orm.NewOrm()
-	MainDatabase.replicated = (replicated == true && Engine != "sqlite3")
+	MainDatabase.Replicated = (replicated == true && Engine != "sqlite3")
 
 	insertDemo, _ := beego.AppConfig.Bool(dbBlk + "insertDemoData")
 	if force && insertDemo {
 		InsertDemoData()
 	}
 
-	if MainDatabase.replicated == true {
+	if MainDatabase.Replicated == true {
 		MainDatabase.Orm.Using("slave")
 		MainDatabase.Orm.Raw("start slave")
 	}

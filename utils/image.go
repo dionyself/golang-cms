@@ -47,20 +47,19 @@ func CropImage(img io.Reader, imgMimeType string, target string, anchorCoord [2]
 	return nil, nil
 }
 
-func UploadImage(target string, img image.Image) string {
+func UploadImage(target string, img image.Image) error {
 	localStorageBlk := "localStorageConfig-" + CurrentEnvironment + "::"
 	if enabled, err := beego.AppConfig.Bool(localStorageBlk + "enabled"); enabled == true && err == nil {
 		name := getImageHash(img)
-		url := "./" + target + "/" + name + ".jpg"
+		url := fmt.Sprintf("./%s/%s_%v_%v.jpg", target, name, ImageSizes[target][0], ImageSizes[target][0])
 		out, err := os.Create(url)
 		defer out.Close()
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
-		err = jpeg.Encode(out, img, nil)
-		if err == nil {
-			return "./" + target + "/" + name + ".jpg"
+		if err = jpeg.Encode(out, img, nil); err == nil {
+			return err
 		}
 	}
 	return uploadToRemote()
@@ -74,8 +73,9 @@ func getImageHash(img image.Image) string {
 	return fmt.Sprintf("%x", hashBytes)
 }
 
-func uploadToRemote() string {
-	return "TODO: image.uploadToRemote()"
+func uploadToRemote() error {
+	// error("TODO: image.uploadToRemote()")
+	return nil
 }
 
 func syncronize(every time.Duration) {

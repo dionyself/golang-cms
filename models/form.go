@@ -28,7 +28,7 @@ type ArticleForm struct {
 type ImageForm struct {
 	Name          string            `form:"name" valid:"Required;"`
 	User          int               `form:"user" valid:"Required;Numeric"`
-	Target        string            `form:"target" valid:"Required;"`
+	Targets       string            `form:"target" valid:"Required;"`
 	PivoteX       int               `form:"pivotex" valid:"Required;Numeric"`
 	PivoteY       int               `form:"pivotey" valid:"Required;Numeric"`
 	ImageType     string            `form:"name" valid:"Required;"`

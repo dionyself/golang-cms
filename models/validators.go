@@ -65,7 +65,7 @@ func (form *ImageForm) Validate() bool {
 		beego.Error(err)
 	} else {
 		if isValid {
-			if !utils.ContainsKey(utils.ImageSizes, form.Target) {
+			if !utils.ContainsKey(utils.ImageSizes, form.Targets) {
 				validator.SetError("Category", "Invalid category")
 				isValid = false
 			}

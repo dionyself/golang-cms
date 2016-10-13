@@ -1,11 +1,12 @@
 package cache
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/astaxie/beego"
 	redisCache "github.com/astaxie/beego/cache/redis"
-	"github.com/garyburd/redigo/redis"
 	internalCache "github.com/patrickmn/go-cache"
 )
 
@@ -21,24 +22,92 @@ type CACHE struct {
 	dualmode          bool
 }
 
-// GetString bring string from cache, expiration time in seconds
-func (cache *CACHE) GetString(cacheKey string, expirationTime int64) (string, bool) {
+// GetMap bring string from cache, expiration time in seconds
+func (cache *CACHE) GetMap(cacheKey string, expirationTime int64) (map[string]string, bool) {
 	if !cache.isEnabled {
-		return "", false
+		return nil, false
+	}
+	var result map[string]string
+	Map := func(incomingValue interface{}) map[string]string {
+		switch value := incomingValue.(type) {
+		case map[string]string:
+			result = value
+		case []byte:
+			var newValue map[string]string
+			json.Unmarshal(value, &newValue)
+			result = newValue
+		case string:
+			var newValue map[string]string
+			json.Unmarshal([]byte(value), &newValue)
+			result = newValue
+		default:
+			result = nil
+		}
+		return result
 	}
 	payload, found := cache.internal.Get(cacheKey)
 	if found {
-		result, err := redis.String(payload, nil)
-		if err == nil {
+		result = Map(payload)
+		if result != nil {
 			return result, true
 		}
 	}
 	if cache.dualmode {
 		server := cache.servers["slave"]
-		result, err := redis.String(server.Get(cacheKey), nil)
-		if err == nil {
-			cache.Set(cacheKey, result, expirationTime)
+		slaveResult := server.Get(cacheKey)
+		if slaveResult != nil {
+			go cache.Set(cacheKey, slaveResult, expirationTime)
+			result = Map(slaveResult)
+			if result != nil {
+				return result, true
+			}
+		}
+	}
+	return nil, false
+}
+
+func (cache *CACHE) GetStringList(cacheKey string, expirationTime int64) []string {
+	return []string{}
+}
+
+// GetString bring string from cache, expiration time in seconds
+func (cache *CACHE) GetString(cacheKey string, expirationTime int64) (string, bool) {
+	if !cache.isEnabled {
+		return "", false
+	}
+	var result string
+	String := func(incomingValue interface{}) string {
+		switch value := incomingValue.(type) {
+		case string:
+			result = value
+		case int32, int64:
+			result = fmt.Sprintf("%v", value)
+		case []byte:
+			result = string(value[:])
+		case map[string]string:
+			jsonValue, _ := json.Marshal(value)
+			result = string(jsonValue[:])
+		default:
+			result = ""
+		}
+		return result
+	}
+	payload, found := cache.internal.Get(cacheKey)
+	if found {
+		result = String(payload)
+		if result != "" {
 			return result, true
+		}
+	}
+	if cache.dualmode {
+		server := cache.servers["slave"]
+		slaveResult := server.Get(cacheKey)
+		if slaveResult != nil {
+			go cache.Set(cacheKey, slaveResult, expirationTime)
+			result = String(slaveResult)
+			if result != "" {
+				return result, true
+			}
 		}
 	}
 	return "", false

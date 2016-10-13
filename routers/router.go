@@ -22,13 +22,14 @@ func init() {
 	beego.Router("/article/:id:int/:action:string", &controllers.ArticleController{})
 
 	// User requests
+	beego.Router("/ajax/image/:id:int", &controllers.AjaxController{}, "get:GetImageUploadStatus;post:PostImage")
 	beego.Router("/profile/:id:int/:action:string", &controllers.ProfileController{}, "get:UserPanelView")
 
 	// filters
 	beego.InsertFilter("/profile/:id:int/show", beego.BeforeRouter, controllers.AuthRequest)
 	beego.InsertFilter("/article/:id:int/edit", beego.BeforeRouter, controllers.AuthRequest)
 	beego.InsertFilter("/article/:id:int/comment", beego.BeforeRouter, controllers.AuthRequest)
-	beego.InsertFilter("/ajax/image/:id:int/edit", beego.BeforeRouter, controllers.AuthRequest)
+	beego.InsertFilter("/ajax/image/:id:int", beego.BeforeRouter, controllers.AuthRequest)
 	beego.InsertFilter("/*", beego.BeforeExec, controllers.DetectUserAgent)
 	beego.InsertFilter("/", beego.BeforeExec, controllers.DetectUserAgent)
 }

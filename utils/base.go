@@ -45,6 +45,13 @@ func ContainsKey(thisMap interface{}, key string) bool {
 	return false
 }
 
+func MergeMaps(map1 map[string]string, map2 map[string]string) map[string]string {
+	for key, value := range map2 {
+		map1[key] = value
+	}
+	return map1
+}
+
 func DetectMimeType(file io.Reader) (string, error) {
 	buff := make([]byte, 512) // docs tell that it take only first 512 bytes into consideration
 	if _, err := file.Read(buff); err != nil {
