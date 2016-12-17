@@ -1,9 +1,11 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/context"
-	"github.com/astaxie/beego/orm"
+	"strconv"
+
+	"github.com/dionyself/beego"
+	"github.com/dionyself/beego/context"
+	"github.com/dionyself/beego/orm"
 	"github.com/dionyself/golang-cms/core/block"
 	"github.com/dionyself/golang-cms/core/defaults"
 	"github.com/dionyself/golang-cms/core/lib/cache"
@@ -46,7 +48,7 @@ func (CTRL *BaseController) GetBlocks() map[string]string {
 	ActiveBlocks := block.GetActiveBlocks(false)
 	for _, CurentBlock := range ActiveBlocks {
 		cblock := block.Blocks[CurentBlock]
-		loadedBlocks["Block_"+cblock.GetPosition()] = cblock.GetTemplatePath()
+		loadedBlocks["Block_"+strconv.Itoa(cblock.GetPosition())] = cblock.GetTemplatePath()
 		CTRL.Data[CurentBlock] = cblock.GetContent()
 	}
 	CTRL.LayoutSections = utils.MergeMaps(CTRL.LayoutSections, loadedBlocks)

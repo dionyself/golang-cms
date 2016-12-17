@@ -4,8 +4,8 @@ import (
 	"io/ioutil"
 	"strings"
 
-	_ "github.com/astaxie/beego"
-	_ "github.com/astaxie/beego/orm"
+	_ "github.com/dionyself/beego"
+	_ "github.com/dionyself/beego/orm"
 	"github.com/dionyself/golang-cms/core/lib/cache"
 	"github.com/dionyself/golang-cms/core/lib/db"
 	"github.com/dionyself/golang-cms/models"

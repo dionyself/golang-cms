@@ -15,7 +15,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/astaxie/beego"
+	"github.com/dionyself/beego"
 	"github.com/dionyself/cutter"
 )
 

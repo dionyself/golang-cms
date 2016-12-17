@@ -1,27 +1,25 @@
 package block
 
 import (
-	_ "github.com/astaxie/beego"
-	_ "github.com/astaxie/beego/orm"
-	"github.com/dionyself/golang-cms/core/lib/db"
+	_ "github.com/dionyself/beego"
+	_ "github.com/dionyself/beego/orm"
 	"github.com/dionyself/golang-cms/models"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 )
 
-var BlockType = "html"
-
 type htmlBlock struct {
-	Content string
-	Type    string
-	Name    string
-	Config  []*models.BlockConfig //map[string]string
-	//IsActive    bool
+	content     string
+	Type        string
+	Name        string
+	Config      []*models.BlockConfig //map[string]string
+	isActive    bool
 	IsCacheable bool
 	index       int
 	templates   []string
 	tempate     string
+	position    int
 }
 
 // this maybe moved to single funct
@@ -33,15 +31,20 @@ func (block htmlBlock) Init() {
 	// Block[config["name"]] = block.load(models.Block)
 }
 
-func (block htmlBlock) GetContent() string {
-	return "test content"
+// GetBlockType yup this is hardcoded an this the way to do it
+func (block htmlBlock) GetBlockType() string {
+	return "html"
 }
-func (block htmlBlock) GetPosition() string {
-	return "1"
+
+func (block htmlBlock) GetContent() string {
+	return block.content
+}
+func (block htmlBlock) GetPosition() int {
+	return block.position
 }
 
 func (block htmlBlock) IsActive() bool {
-	return true
+	return block.isActive
 }
 
 //this couldbe reimplemented susupport mutiple themes/templates/style
@@ -50,23 +53,16 @@ func (block htmlBlock) GetTemplatePath() string {
 	return "default/blocks/html_block.html"
 }
 
-func (block htmlBlock) Load(blockModel *models.Block) htmlBlock {
+func (block htmlBlock) Load(blockModel *models.Block) Block {
 	//block.Type = blockModel.Type
-	//block.Content = blockModel.Content
-	//block.Name = blockModel.Name
+	block.content = blockModel.Content
+	block.Name = blockModel.Name
 	//block.Config = blockModel.Config
+	block.position = blockModel.Position
+	block.isActive = blockModel.IsActive
 	return block
 }
 
 func init() {
-	DB := db.MainDatabase.Orm
-	htmlBlocks := []models.Block{}
-	qs := DB.QueryTable("block").Filter("type", BlockType)
-	qs.All(&htmlBlocks)
-	toUpdate := htmlBlock{}
-	RegisteredBlocks[BlockType] = toUpdate //we may to want populate with some default info
-	for _, currentBlock := range htmlBlocks {
-		toUpdate := new(htmlBlock)
-		Blocks[currentBlock.Name] = toUpdate.Load(&currentBlock)
-	}
+	initBlock(htmlBlock{})
 }

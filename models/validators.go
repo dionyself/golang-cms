@@ -1,8 +1,8 @@
 package models
 
 import (
-	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/validation"
+	"github.com/dionyself/beego"
+	"github.com/dionyself/beego/validation"
 	"github.com/dionyself/golang-cms/utils"
 )
 

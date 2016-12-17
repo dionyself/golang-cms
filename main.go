@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/astaxie/beego"
-	_ "github.com/astaxie/beego/session/redis"
+	"github.com/dionyself/beego"
+	_ "github.com/dionyself/beego/session/redis"
 	_ "github.com/dionyself/golang-cms/core/template"
 	_ "github.com/dionyself/golang-cms/routers"
 	"github.com/dionyself/golang-cms/utils"

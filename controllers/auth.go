@@ -6,9 +6,9 @@ import (
 	"github.com/dionyself/golang-cms/models"
 	"github.com/dionyself/golang-cms/utils"
 
-	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/context"
-	"github.com/astaxie/beego/orm"
+	"github.com/dionyself/beego"
+	"github.com/dionyself/beego/context"
+	"github.com/dionyself/beego/orm"
 )
 
 var sessionName = beego.AppConfig.String("SessionName")

@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/astaxie/beego"
+	"github.com/dionyself/beego"
 )
 
 // SessionInit ...

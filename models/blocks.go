@@ -12,6 +12,7 @@ type Block struct {
 	CreateTime time.Time `orm:"column(create_time);type(timestamp);auto_now_add"`
 	Type       string    `orm:"column(type);size(128)"`
 	IsActive   bool
+	Position   int
 	//Config     []*BlockConfig `orm:"reverse(many)"`
 }
 
