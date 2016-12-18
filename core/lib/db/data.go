@@ -28,7 +28,9 @@ func InsertDemoData() bool {
 	db.Insert(&user)
 	db.Insert(&category)
 	db.Insert(&article)
-  htmlblock := models.Block{Name: "Default html block", Type: "html", IsActive: true, Position: 1, Content: "this is a test of default conter for default blocks"}
+  htmlblock := models.Block{Name: "Default html block1", Type: "html", IsActive: true, Position: 1, Content: "{\"body\": \"this is a test for default blocks position 1 !\"}"}
+  db.Insert(&htmlblock)
+  htmlblock = models.Block{Name: "Default html block2", Type: "html", IsActive: true, Position: 2, Content: "{\"body\": \"this is a test for default blocks position 2 !\"}"}
   db.Insert(&htmlblock)
 
 	return true

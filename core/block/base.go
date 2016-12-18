@@ -13,7 +13,7 @@ import (
 
 type Block interface {
 	GetTemplatePath() string
-	GetContent() string
+	GetContent() map[string]string
 	GetPosition() int
 	GetBlockType() string
 	//IsContentCacheable() bool

@@ -1,6 +1,8 @@
 package block
 
 import (
+	"encoding/json"
+
 	_ "github.com/dionyself/beego"
 	_ "github.com/dionyself/beego/orm"
 	"github.com/dionyself/golang-cms/models"
@@ -10,7 +12,7 @@ import (
 )
 
 type htmlBlock struct {
-	content     string
+	content     map[string]string
 	Type        string
 	Name        string
 	Config      []*models.BlockConfig //map[string]string
@@ -36,7 +38,7 @@ func (block htmlBlock) GetBlockType() string {
 	return "html"
 }
 
-func (block htmlBlock) GetContent() string {
+func (block htmlBlock) GetContent() map[string]string {
 	return block.content
 }
 func (block htmlBlock) GetPosition() int {
@@ -47,7 +49,7 @@ func (block htmlBlock) IsActive() bool {
 	return block.isActive
 }
 
-//this couldbe reimplemented susupport mutiple themes/templates/style
+//this couldbe reimplemented support mutiple themes/templates/style
 // by now hardoding
 func (block htmlBlock) GetTemplatePath() string {
 	return "default/blocks/html_block.html"
@@ -55,7 +57,7 @@ func (block htmlBlock) GetTemplatePath() string {
 
 func (block htmlBlock) Load(blockModel *models.Block) Block {
 	//block.Type = blockModel.Type
-	block.content = blockModel.Content
+	json.Unmarshal([]byte(blockModel.Content), &block.content)
 	block.Name = blockModel.Name
 	//block.Config = blockModel.Config
 	block.position = blockModel.Position

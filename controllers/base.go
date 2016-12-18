@@ -48,8 +48,10 @@ func (CTRL *BaseController) GetBlocks() map[string]string {
 	ActiveBlocks := block.GetActiveBlocks(false)
 	for _, CurentBlock := range ActiveBlocks {
 		cblock := block.Blocks[CurentBlock]
-		loadedBlocks["Block_"+strconv.Itoa(cblock.GetPosition())] = cblock.GetTemplatePath()
-		CTRL.Data[CurentBlock] = cblock.GetContent()
+		cblockSectionName := "Block_" + strconv.Itoa(cblock.GetPosition())
+		cblockSectionData := cblockSectionName + "_Data"
+		loadedBlocks[cblockSectionName] = cblock.GetTemplatePath()
+		CTRL.Data[cblockSectionData] = cblock.GetContent()
 	}
 	CTRL.LayoutSections = utils.MergeMaps(CTRL.LayoutSections, loadedBlocks)
 	return CTRL.LayoutSections
