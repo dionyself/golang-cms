@@ -45,6 +45,10 @@ To compile and run the installer execute. (you will need to use GO v1.7.4 or lat
 Browse 127.0.0.1:8080 to see GolangCMS running.
 Login details. user: test, password: test
 
+- To create new articles visit http://127.0.0.1:8080/article/0/edit
+- To view an article visit http://127.0.0.1:8080/article/<article_id>/show
+- ex. http://127.0.0.1:8080/article/2/show
+
 Note: You will be running a pre-alpha version in testmode.
 
 *************
