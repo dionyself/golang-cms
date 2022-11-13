@@ -79,11 +79,11 @@ To run unittests.
 
 Bitcoin Donations.
 
-.. image:: https://scontent.fsdq1-2.fna.fbcdn.net/v/t39.30808-6/313430088_2599438973524215_7879645149016306497_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=730e14&_nc_eui2=AeEphyk5KATsx2ad8SuxMKSUodzbm3Kxjk2h3NubcrGOTY3pYJVIVQvrKvA3TQe2Ui4CpanN7BHRZ93_KaJGhiHh&_nc_ohc=i409G20bmsAAX-Momwn&_nc_zt=23&_nc_ht=scontent.fsdq1-2.fna&oh=00_AfCIT6Bhsql0O55E3IfrNy2JqG4KAItmFMwZHkxAQADq5g&oe=636D99DE
+.. image:: https://raw.githubusercontent.com/dionyself/golang-cms/master/static/img/btttcc.png
 
 XMR (Monero) Donations.
 
-.. image:: https://scontent.fsdq1-1.fna.fbcdn.net/v/t39.30808-6/313864958_2599496130185166_4335848911691923872_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=730e14&_nc_eui2=AeGLnUVv6hW29LoGaFv7C_Q6iKwTeG849lyIrBN4bzj2XK-GDHh9rQaoLA2kLDrlWQr7bRDpVlsYp0jrgoKOJadi&_nc_ohc=aSjd4-gCmOkAX_ZoNve&_nc_zt=23&_nc_ht=scontent.fsdq1-1.fna&oh=00_AfAZP701kDSzpDin2RBLH0CzTGhVAuNAOmJz0NqqWMe31Q&oe=636D09E5
+.. image:: https://raw.githubusercontent.com/dionyself/golang-cms/master/static/img/xmmr.jpeg
    :height: 300px
    :width: 300 px
 
