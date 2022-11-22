@@ -77,22 +77,26 @@ To run unittests.
 
  - goconvey $GOPATH/src/github.com/dionyself/golang-cms/tests/
 
-Bitcoin Donations.
+.. |bitcoin| image:: https://raw.githubusercontent.com/dionyself/golang-cms/master/static/img/btttcc.png
+   :height: 230px
+   :width: 230 px
+   :alt: Donate with Bitcoin
 
-.. image:: https://raw.githubusercontent.com/dionyself/golang-cms/master/static/img/btttcc.png
-
-XMR (Monero) Donations.
-
-.. image:: https://raw.githubusercontent.com/dionyself/golang-cms/master/static/img/xmmr.jpeg
-   :height: 300px
-   :width: 300 px
-
-Paypal
-
-.. image:: https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif
+.. |xmr| image:: https://raw.githubusercontent.com/dionyself/golang-cms/master/static/img/xmmr.jpeg
+   :height: 250px
+   :width: 250 px
+   :alt: Donate with Monero
+   
+.. |paypal| image:: https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif
    :height: 100px
    :width: 200 px
-   :scale: 50 %
-   :alt: alternate text
-   :align: right
+   :alt: Donate with Paypal
    :target: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=L4H5TUWZTZERS
+
++------------------------------+
+| Donate to this project       |
++-----------+-------+----------+
+| Bitcoin   |  XMR  | Paypal   |
++-----------+-------+----------+
+| |bitcoin| + |xmr| + |paypal| +
++-----------+-------+----------+
