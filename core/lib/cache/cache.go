@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/dionyself/beego"
-	redisCache "github.com/dionyself/beego/cache/redis"
+	"github.com/beego/beego/v2/server/web"
+	redisCache "github.com/beego/beego/v2/server/web/session/redis"
 	internalCache "github.com/patrickmn/go-cache"
 )
 
@@ -136,14 +136,14 @@ func (cache *CACHE) Set(cacheKey string, value interface{}, expirationTime int64
 }
 
 func init() {
-	env := beego.AppConfig.String("RunMode")
+	env := web.AppConfig.String("RunMode")
 	cacheBlk := "cacheConfig-" + env + "::"
-	isEnable, _ := beego.AppConfig.Bool(cacheBlk + "enabled")
-	dualmode, _ := beego.AppConfig.Bool(cacheBlk + "dualmode")
-	master := beego.AppConfig.String(cacheBlk + "redisMasterServer")
-	slave := beego.AppConfig.String(cacheBlk + "redisSlaveServer")
-	flushInterval, _ := beego.AppConfig.Int64(cacheBlk + "flushInterval")
-	defaultExpiry, _ := beego.AppConfig.Int64(cacheBlk + "defaultExpiry")
+	isEnable, _ := web.AppConfig.Bool(cacheBlk + "enabled")
+	dualmode, _ := web.AppConfig.Bool(cacheBlk + "dualmode")
+	master := web.AppConfig.String(cacheBlk + "redisMasterServer")
+	slave := web.AppConfig.String(cacheBlk + "redisSlaveServer")
+	flushInterval, _ := web.AppConfig.Int64(cacheBlk + "flushInterval")
+	defaultExpiry, _ := web.AppConfig.Int64(cacheBlk + "defaultExpiry")
 	MainCache = CACHE{isEnabled: isEnable, dualmode: dualmode}
 	MainCache.internal = internalCache.New(time.Duration(defaultExpiry)*time.Second, time.Duration(flushInterval)*time.Second)
 	MainCache.DefaultExpiration = internalCache.DefaultExpiration

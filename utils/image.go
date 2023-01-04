@@ -15,7 +15,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dionyself/beego"
+	"github.com/beego/beego/v2/server/web"
 	"github.com/dionyself/cutter"
 )
 
@@ -49,7 +49,7 @@ func CropImage(img io.Reader, imgMimeType string, target string, anchorCoord [2]
 
 func UploadImage(target string, img image.Image) error {
 	localStorageBlk := "localStorageConfig-" + CurrentEnvironment + "::"
-	if enabled, err := beego.AppConfig.Bool(localStorageBlk + "enabled"); enabled == true && err == nil {
+	if enabled, err := web.AppConfig.Bool(localStorageBlk + "enabled"); enabled == true && err == nil {
 		name := getImageHash(img)
 		url := fmt.Sprintf("./%s/%s_%v_%v.jpg", target, name, ImageSizes[target][0], ImageSizes[target][0])
 		out, err := os.Create(url)
@@ -82,23 +82,23 @@ func syncronize(every time.Duration) {
 	//var out bytes.Buffer
 	var cmd *exec.Cmd
 	localStorageBlk := "localStorageConfig-" + CurrentEnvironment + "::"
-	backupEnabled, _ := beego.AppConfig.Bool(localStorageBlk + "backupEnabled")
+	backupEnabled, _ := web.AppConfig.Bool(localStorageBlk + "backupEnabled")
 
-	source := beego.AppConfig.String(localStorageBlk + "originFolder")
+	source := web.AppConfig.String(localStorageBlk + "originFolder")
 	target := ""
 
-	targetFolder := beego.AppConfig.String(localStorageBlk + "targetFolder")
-	storageUser := beego.AppConfig.String(localStorageBlk + "storageUser")
-	servers := strings.Fields(beego.AppConfig.String(localStorageBlk + "mode"))
-	customTarget := beego.AppConfig.String(localStorageBlk + "customTarget")
-	syncBackup := beego.AppConfig.String(localStorageBlk + "syncBackup")
-	backupFolder := beego.AppConfig.String(localStorageBlk + "backupFolder")
+	targetFolder := web.AppConfig.String(localStorageBlk + "targetFolder")
+	storageUser := web.AppConfig.String(localStorageBlk + "storageUser")
+	servers := strings.Fields(web.AppConfig.String(localStorageBlk + "mode"))
+	customTarget := web.AppConfig.String(localStorageBlk + "customTarget")
+	syncBackup := web.AppConfig.String(localStorageBlk + "syncBackup")
+	backupFolder := web.AppConfig.String(localStorageBlk + "backupFolder")
 
 	for syncTime := range time.Tick(every) {
 		target = ""
 		fmt.Println("syncronzing files... at: ", syncTime)
 
-		switch beego.AppConfig.String(localStorageBlk + "mode") {
+		switch web.AppConfig.String(localStorageBlk + "mode") {
 		case "single":
 			if !backupEnabled {
 				fmt.Println("Sync disabled on single mode...")
@@ -173,10 +173,10 @@ func init() {
 	ImageSizes["custom-max"] = [2]int{3000, 2000}
 	SuportedMimeTypes["images"] = []string{"image/png", "image/jpeg"}
 
-	currentEnvironment := beego.AppConfig.String("RunMode")
+	currentEnvironment := web.AppConfig.String("RunMode")
 	localStorageBlk := "localStorageConfig-" + currentEnvironment + "::"
-	syncTime, _ := beego.AppConfig.Int(localStorageBlk + "syncTime")
-	syncEnabled, _ := beego.AppConfig.Bool(localStorageBlk + "enabled")
+	syncTime, _ := web.AppConfig.Int(localStorageBlk + "syncTime")
+	syncEnabled, _ := web.AppConfig.Bool(localStorageBlk + "enabled")
 	if syncTime != 0 && syncEnabled {
 		go syncronize(time.Duration(syncTime) * time.Second)
 	}

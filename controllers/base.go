@@ -3,21 +3,20 @@ package controllers
 import (
 	"strconv"
 
-	"github.com/dionyself/beego"
-	"github.com/dionyself/beego/context"
-	"github.com/dionyself/beego/orm"
+	"github.com/beego/beego/v2/client/orm"
+	"github.com/beego/beego/v2/server/web"
+	"github.com/beego/beego/v2/server/web/context"
 	"github.com/dionyself/golang-cms/core/block"
 	"github.com/dionyself/golang-cms/core/defaults"
 	"github.com/dionyself/golang-cms/core/lib/cache"
 	database "github.com/dionyself/golang-cms/core/lib/db"
 	"github.com/dionyself/golang-cms/core/template"
 	"github.com/dionyself/golang-cms/utils"
-	"github.com/dionyself/gomobiledetect"
 )
 
 // BaseController Extendable
 type BaseController struct {
-	beego.Controller
+	web.Controller
 	db    orm.Ormer
 	cache cache.CACHE
 }
@@ -111,7 +110,7 @@ var DetectUserAgent = func(ctx *context.Context) {
 			device = "tablet"
 		}
 		if device == "" {
-			device = beego.AppConfig.String("DefaultDevice")
+			device = web.AppConfig.String("DefaultDevice")
 			if device == "" {
 				device = "desktop"
 			}

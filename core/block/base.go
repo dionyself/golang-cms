@@ -1,8 +1,8 @@
 package block
 
 import (
+	_ "github.com/beego/beego/v2/server/web"
 	_ "github.com/dionyself/beego"
-	_ "github.com/dionyself/beego/orm"
 	"github.com/dionyself/golang-cms/core/lib/cache"
 	"github.com/dionyself/golang-cms/core/lib/db"
 	"github.com/dionyself/golang-cms/models"

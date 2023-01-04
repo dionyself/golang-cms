@@ -3,8 +3,8 @@ package block
 import (
 	"encoding/json"
 
-	_ "github.com/dionyself/beego"
-	_ "github.com/dionyself/beego/orm"
+	_ "github.com/beego/beego/v2/client/orm"
+	_ "github.com/beego/beego/v2/server/web"
 	"github.com/dionyself/golang-cms/models"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
@@ -25,7 +25,7 @@ type htmlBlock struct {
 }
 
 // this maybe moved to single funct
-//func (block htmlBlock) Init(siteData map[string]string, config map[string]string, content map[string]string) {
+// func (block htmlBlock) Init(siteData map[string]string, config map[string]string, content map[string]string) {
 func (block htmlBlock) Init() {
 	// blockModel := new(models.Block)
 	// blockModel.Config = block.generateConfig(siteData map[string]string, config map[string]string)
@@ -49,7 +49,7 @@ func (block htmlBlock) IsActive() bool {
 	return block.isActive
 }
 
-//this couldbe reimplemented support mutiple themes/templates/style
+// this couldbe reimplemented support mutiple themes/templates/style
 // by now hardoding
 func (block htmlBlock) GetTemplatePath() string {
 	return "default/blocks/html_block.html"

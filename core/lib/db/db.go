@@ -3,8 +3,8 @@ package db
 import (
 	"fmt"
 
-	"github.com/dionyself/beego"
-	"github.com/dionyself/beego/orm"
+	"github.com/beego/beego/v2/client/orm"
+	"github.com/beego/beego/v2/server/web"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
@@ -21,22 +21,22 @@ type DB struct {
 
 func init() {
 	fmt.Println("loading utils.db")
-	env := beego.AppConfig.String("RunMode")
+	env := web.AppConfig.String("RunMode")
 	dbBlk := "databaseConfig-" + env + "::"
 	MasterAddress := ""
 	SlaveAddress := ""
 	masterServerPort := ""
 	slaveServerPort := ""
 	replicated := false
-	Engine := beego.AppConfig.String("DatabaseProvider")
-	replicated, _ = beego.AppConfig.Bool(dbBlk + "replicated")
-	masterServerPort = beego.AppConfig.String(dbBlk + "masterServerPort")
-	slaveServerPort = beego.AppConfig.String(dbBlk + "slaveServerPort")
-	Username := beego.AppConfig.String(dbBlk + "databaseUser")
-	UserPassword := beego.AppConfig.String(dbBlk + "userPassword")
-	MasterServer := beego.AppConfig.String(dbBlk + "masterServer")
-	SlaveServer := beego.AppConfig.String(dbBlk + "slaveServer")
-	Name := beego.AppConfig.String(dbBlk + "databaseName")
+	Engine := web.AppConfig.String("DatabaseProvider")
+	replicated, _ = web.AppConfig.Bool(dbBlk + "replicated")
+	masterServerPort = web.AppConfig.String(dbBlk + "masterServerPort")
+	slaveServerPort = web.AppConfig.String(dbBlk + "slaveServerPort")
+	Username := web.AppConfig.String(dbBlk + "databaseUser")
+	UserPassword := web.AppConfig.String(dbBlk + "userPassword")
+	MasterServer := web.AppConfig.String(dbBlk + "masterServer")
+	SlaveServer := web.AppConfig.String(dbBlk + "slaveServer")
+	Name := web.AppConfig.String(dbBlk + "databaseName")
 	maxIdle := 300
 	maxConn := 300
 	if Engine == "" {
@@ -62,7 +62,7 @@ func init() {
 		}
 	} else if Engine == "sqlite3" {
 		orm.RegisterDriver(Engine, orm.DRSqlite)
-		MasterAddress = "file:" + beego.AppConfig.String(dbBlk+"sqliteFile")
+		MasterAddress = "file:" + web.AppConfig.String(dbBlk+"sqliteFile")
 	} else if Engine == "postgres" {
 		orm.RegisterDriver(Engine, orm.DRPostgres)
 		if masterServerPort == "0" {
@@ -97,9 +97,9 @@ func init() {
 	}
 
 	// DB SETUP
-	orm.Debug, _ = beego.AppConfig.Bool("DatabaseDebugMode")
-	force, _ := beego.AppConfig.Bool("ReCreateDatabase")
-	verbose, _ := beego.AppConfig.Bool("DatabaseLogging")
+	orm.Debug, _ = web.AppConfig.Bool("DatabaseDebugMode")
+	force, _ := web.AppConfig.Bool("ReCreateDatabase")
+	verbose, _ := web.AppConfig.Bool("DatabaseLogging")
 	err = orm.RunSyncdb("default", force, verbose)
 	if err != nil {
 		panic(err)
@@ -113,7 +113,7 @@ func init() {
 	MainDatabase.Orm = orm.NewOrm()
 	MainDatabase.Replicated = (replicated == true && Engine != "sqlite3")
 
-	insertDemo, _ := beego.AppConfig.Bool(dbBlk + "insertDemoData")
+	insertDemo, _ := web.AppConfig.Bool(dbBlk + "insertDemoData")
 	if force && insertDemo {
 		InsertDemoData()
 	}

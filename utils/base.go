@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/dionyself/beego"
+	"github.com/beego/beego/v2/server/web"
 )
 
 /*
@@ -62,6 +62,6 @@ func DetectMimeType(file io.Reader) (string, error) {
 }
 
 func init() {
-	CurrentEnvironment = beego.AppConfig.String("RunMode")
+	CurrentEnvironment = web.AppConfig.String("RunMode")
 	SuportedMimeTypes = make(map[string][]string)
 }

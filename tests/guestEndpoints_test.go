@@ -7,10 +7,10 @@ import (
 	"runtime"
 	"testing"
 
-	_ "github.com/dionyself/beego/session/redis"
+	_ "github.com/beego/beego/v2/server/web/session/redis"
 	_ "github.com/dionyself/golang-cms/routers"
 
-	"github.com/dionyself/beego"
+	"github.com/beego/beego/v2/server/web"
 	. "github.com/smartystreets/goconvey/convey"
 )
 

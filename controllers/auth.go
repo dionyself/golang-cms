@@ -6,12 +6,12 @@ import (
 	"github.com/dionyself/golang-cms/models"
 	"github.com/dionyself/golang-cms/utils"
 
-	"github.com/dionyself/beego"
-	"github.com/dionyself/beego/context"
-	"github.com/dionyself/beego/orm"
+	"github.com/beego/beego/v2/client/orm"
+	"github.com/beego/beego/v2/server/web"
+	"github.com/beego/beego/v2/server/web/context"
 )
 
-var sessionName = beego.AppConfig.String("SessionName")
+var sessionName = web.AppConfig.String("SessionName")
 
 // LoginController ...
 type LoginController struct {
