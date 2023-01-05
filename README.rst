@@ -46,7 +46,8 @@ Setting a development environment and/or contributing
 
 - git clone https://github.com/dionyself/golang-cms.git
 - cd golang-cms
-- go get -u  github.com/beego/bee
+- go get github.com/beego/bee/v2
+- go install github.com/beego/bee/v2
 - bee run
 
 To run unittests.
