@@ -1,11 +1,13 @@
-FROM golang:1.10-alpine3.7
-MAINTAINER Dionys Rosario <dionyself@gmail.com>
+FROM golang:1.19.4-alpine3.17
+LABEL "email"="dionyself@gmail.com"
 
-RUN apk add --no-cache git gcc g++ \
+RUN apk add --no-cache git gcc g++
+RUN mkdir /app
+RUN cd /app && git clone https://github.com/dionyself/golang-cms && cd golang-cms \
  && go get -u github.com/beego/bee \
- && go get -u github.com/dionyself/golang-cms
+ && go mod tidy
 
 EXPOSE 8080
 
 # Start app
-CMD sh $GOPATH/src/github.com/dionyself/golang-cms/run.sh
+CMD sh /app/golang-cms/run.sh

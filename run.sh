@@ -1,10 +1,8 @@
 #!/bin/bash
 
-export GOLANG_CMS_VERSION=${GOLANG_CMS_VERSION:="master"}
-cd $GOPATH/src/github.com/dionyself/golang-cms
-bee run
-
-git fetch $GOLANG_CMS_VERSION
+cd /app/golang-cms
+git pull origin master --tags
+export GOLANG_CMS_VERSION=$(git tag --sort=committerdate | tail -1)
 git checkout $GOLANG_CMS_VERSION
-git pull origin $GOLANG_CMS_VERSION
+go mod tidy
 bee run
