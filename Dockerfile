@@ -2,7 +2,6 @@ FROM golang:1.10-alpine3.7
 MAINTAINER Dionys Rosario <dionyself@gmail.com>
 
 RUN apk add --no-cache git gcc g++ \
- && go get -u github.com/dionyself/beego \
  && go get -u github.com/beego/bee \
  && go get -u github.com/dionyself/golang-cms
 

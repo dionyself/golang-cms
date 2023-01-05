@@ -29,7 +29,7 @@ func GetActiveTheme(forceDatabase bool) []string {
 	}
 	template := new(models.Template)
 	template.Active = true
-	err := db.MainDatabase.Orm.Read(template, "Active")
+	err := db.MainDatabase.GetOrm("").Read(template, "Active")
 	if err == nil {
 		theme[0] = template.Name
 		for _, style := range template.Style {
@@ -47,32 +47,32 @@ func SetActiveTheme(themeToSet []string) bool {
 	activeTheme := GetActiveTheme(true)
 	template := new(models.Template)
 	template.Name = themeToSet[0]
-	if db.MainDatabase.Orm.Read(&template, "Name") == nil {
+	if db.MainDatabase.GetOrm("").Read(&template, "Name") == nil {
 		template.Active = true
-		db.MainDatabase.Orm.Begin()
-		if _, err := db.MainDatabase.Orm.Update(template, "Active"); err == nil {
+		tOrm, _ := db.MainDatabase.GetOrm("").Begin()
+		if _, err := tOrm.Update(template, "Active"); err == nil {
 			toDeactivate := new(models.Template)
 			toDeactivate.Name = activeTheme[0]
 			toDeactivate.Active = true
-			if db.MainDatabase.Orm.Read(&toDeactivate, "Name", "Active") == nil {
+			if tOrm.Read(&toDeactivate, "Name", "Active") == nil {
 				toDeactivate.Active = false
-				if _, err := db.MainDatabase.Orm.Update(&toDeactivate, "Active"); err != nil {
-					db.MainDatabase.Orm.Rollback()
+				if _, err := tOrm.Update(&toDeactivate, "Active"); err != nil {
+					tOrm.Rollback()
 					return false
 				}
 			}
 		} else {
-			db.MainDatabase.Orm.Rollback()
+			tOrm.Rollback()
 			return false
 		}
-		if err := db.MainDatabase.Orm.Commit(); err == nil {
+		if err := tOrm.Commit(); err == nil {
 			for _, style := range template.Style {
 				if style.Name == themeToSet[1] {
 					style.Active = true
 				} else {
 					style.Active = false
 				}
-				db.MainDatabase.Orm.Update(&style, "Active")
+				tOrm.Update(&style, "Active")
 			}
 			go cache.MainCache.Set("activeTheme", strings.Join(themeToSet, ":"), 60)
 			return true
@@ -83,8 +83,7 @@ func SetActiveTheme(themeToSet []string) bool {
 
 // SaveTemplates save loaded templates into db, thi usually runs on startup
 func SaveTemplates() {
-	db := db.MainDatabase.Orm
-	db.Using("default")
+	db := db.MainDatabase.GetOrm("default")
 	var templates []*models.Template
 	db.QueryTable("template").All(&templates)
 	var existing_templates []string

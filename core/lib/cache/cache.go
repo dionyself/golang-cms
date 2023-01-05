@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"time"
 
+	redisCacheAdapter "github.com/beego/beego/v2/adapter/cache"
+	redisCache "github.com/beego/beego/v2/client/cache"
+	_ "github.com/beego/beego/v2/client/cache/redis"
 	"github.com/beego/beego/v2/server/web"
-	redisCache "github.com/beego/beego/v2/server/web/session/redis"
 	internalCache "github.com/patrickmn/go-cache"
 )
 
@@ -16,7 +18,7 @@ var MainCache CACHE
 // CACHE main ...
 type CACHE struct {
 	isEnabled         bool
-	servers           map[string]redisCache.Cache
+	servers           map[string]redisCacheAdapter.Cache
 	internal          *internalCache.Cache
 	DefaultExpiration time.Duration
 	dualmode          bool
@@ -136,24 +138,22 @@ func (cache *CACHE) Set(cacheKey string, value interface{}, expirationTime int64
 }
 
 func init() {
-	env := web.AppConfig.String("RunMode")
+	env, _ := web.AppConfig.String("RunMode")
 	cacheBlk := "cacheConfig-" + env + "::"
 	isEnable, _ := web.AppConfig.Bool(cacheBlk + "enabled")
 	dualmode, _ := web.AppConfig.Bool(cacheBlk + "dualmode")
-	master := web.AppConfig.String(cacheBlk + "redisMasterServer")
-	slave := web.AppConfig.String(cacheBlk + "redisSlaveServer")
+	master, _ := web.AppConfig.String(cacheBlk + "redisMasterServer")
+	slave, _ := web.AppConfig.String(cacheBlk + "redisSlaveServer")
 	flushInterval, _ := web.AppConfig.Int64(cacheBlk + "flushInterval")
 	defaultExpiry, _ := web.AppConfig.Int64(cacheBlk + "defaultExpiry")
 	MainCache = CACHE{isEnabled: isEnable, dualmode: dualmode}
 	MainCache.internal = internalCache.New(time.Duration(defaultExpiry)*time.Second, time.Duration(flushInterval)*time.Second)
 	MainCache.DefaultExpiration = internalCache.DefaultExpiration
-	MainCache.servers = make(map[string]redisCache.Cache)
+	MainCache.servers = make(map[string]redisCacheAdapter.Cache)
 	if dualmode {
-		masterRedis := redisCache.Cache{}
-		slaveRedis := redisCache.Cache{}
-		_ = masterRedis.StartAndGC(master)
-		_ = slaveRedis.StartAndGC(slave)
-		MainCache.servers["slave"] = slaveRedis
-		MainCache.servers["master"] = masterRedis
+		masterRedis, _ := redisCache.NewCache("redis", master)
+		slaveRedis, _ := redisCache.NewCache("redis", slave)
+		MainCache.servers["slave"] = redisCacheAdapter.CreateNewToOldCacheAdapter(slaveRedis)
+		MainCache.servers["master"] = redisCacheAdapter.CreateNewToOldCacheAdapter(masterRedis)
 	}
 }

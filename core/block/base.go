@@ -2,7 +2,6 @@ package block
 
 import (
 	_ "github.com/beego/beego/v2/server/web"
-	_ "github.com/dionyself/beego"
 	"github.com/dionyself/golang-cms/core/lib/cache"
 	"github.com/dionyself/golang-cms/core/lib/db"
 	"github.com/dionyself/golang-cms/models"
@@ -52,7 +51,7 @@ func GetActiveBlocks(forced bool) []string {
 // initBlock use this to initialize your block
 func initBlock(blockToInit Block) {
 	BlockType := blockToInit.GetBlockType()
-	DB := db.MainDatabase.Orm
+	DB := db.MainDatabase.GetOrm("")
 	byTypeBlocks := []models.Block{}
 	qs := DB.QueryTable("block").Filter("type", BlockType)
 	qs.All(&byTypeBlocks)

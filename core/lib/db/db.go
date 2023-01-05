@@ -15,28 +15,40 @@ var MainDatabase DB
 
 // DB ...
 type DB struct {
-	Orm        orm.Ormer
+	Pool       map[string]orm.Ormer
 	Replicated bool
+}
+
+func (db *DB) GetOrm(db_name string) orm.Ormer {
+	if (db_name == "") || (db_name == "master") {
+		db_name = "default"
+	}
+	_, ok := db.Pool[db_name]
+	if ok {
+		return db.Pool[db_name]
+	}
+	db.Pool[db_name] = orm.NewOrmUsingDB(db_name)
+	return db.Pool[db_name]
 }
 
 func init() {
 	fmt.Println("loading utils.db")
-	env := web.AppConfig.String("RunMode")
+	env, _ := web.AppConfig.String("RunMode")
 	dbBlk := "databaseConfig-" + env + "::"
 	MasterAddress := ""
 	SlaveAddress := ""
 	masterServerPort := ""
 	slaveServerPort := ""
 	replicated := false
-	Engine := web.AppConfig.String("DatabaseProvider")
+	Engine, _ := web.AppConfig.String("DatabaseProvider")
 	replicated, _ = web.AppConfig.Bool(dbBlk + "replicated")
-	masterServerPort = web.AppConfig.String(dbBlk + "masterServerPort")
-	slaveServerPort = web.AppConfig.String(dbBlk + "slaveServerPort")
-	Username := web.AppConfig.String(dbBlk + "databaseUser")
-	UserPassword := web.AppConfig.String(dbBlk + "userPassword")
-	MasterServer := web.AppConfig.String(dbBlk + "masterServer")
-	SlaveServer := web.AppConfig.String(dbBlk + "slaveServer")
-	Name := web.AppConfig.String(dbBlk + "databaseName")
+	masterServerPort, _ = web.AppConfig.String(dbBlk + "masterServerPort")
+	slaveServerPort, _ = web.AppConfig.String(dbBlk + "slaveServerPort")
+	Username, _ := web.AppConfig.String(dbBlk + "databaseUser")
+	UserPassword, _ := web.AppConfig.String(dbBlk + "userPassword")
+	MasterServer, _ := web.AppConfig.String(dbBlk + "masterServer")
+	SlaveServer, _ := web.AppConfig.String(dbBlk + "slaveServer")
+	Name, _ := web.AppConfig.String(dbBlk + "databaseName")
 	maxIdle := 300
 	maxConn := 300
 	if Engine == "" {
@@ -62,7 +74,8 @@ func init() {
 		}
 	} else if Engine == "sqlite3" {
 		orm.RegisterDriver(Engine, orm.DRSqlite)
-		MasterAddress = "file:" + web.AppConfig.String(dbBlk+"sqliteFile")
+		fl_c, _ := web.AppConfig.String(dbBlk + "sqliteFile")
+		MasterAddress = "file:" + fl_c
 	} else if Engine == "postgres" {
 		orm.RegisterDriver(Engine, orm.DRPostgres)
 		if masterServerPort == "0" {
@@ -80,8 +93,8 @@ func init() {
 		"default",
 		Engine,
 		MasterAddress,
-		maxIdle,
-		maxConn)
+		orm.MaxIdleConnections(maxIdle),
+		orm.MaxOpenConnections(maxConn))
 	if err != nil {
 		panic("DB: cannot register DB on master")
 	} else if replicated == true && Engine != "sqlite3" {
@@ -92,8 +105,8 @@ func init() {
 			"slave",
 			Engine,
 			SlaveAddress,
-			maxIdle,
-			maxConn)
+			orm.MaxIdleConnections(maxIdle),
+			orm.MaxOpenConnections(maxConn))
 	}
 
 	// DB SETUP
@@ -109,8 +122,8 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-
-	MainDatabase.Orm = orm.NewOrm()
+	MainDatabase = DB{}
+	MainDatabase.Pool = make(map[string]orm.Ormer)
 	MainDatabase.Replicated = (replicated == true && Engine != "sqlite3")
 
 	insertDemo, _ := web.AppConfig.Bool(dbBlk + "insertDemoData")
@@ -119,7 +132,7 @@ func init() {
 	}
 
 	if MainDatabase.Replicated == true {
-		MainDatabase.Orm.Using("slave")
-		MainDatabase.Orm.Raw("start slave")
+		MainDatabase.GetOrm("slave")
+		MainDatabase.Pool["slave"].Raw("start slave")
 	}
 }

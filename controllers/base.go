@@ -3,6 +3,7 @@ package controllers
 import (
 	"strconv"
 
+	mobiledetect "github.com/Shaked/gomobiledetect"
 	"github.com/beego/beego/v2/client/orm"
 	"github.com/beego/beego/v2/server/web"
 	"github.com/beego/beego/v2/server/web/context"
@@ -69,12 +70,10 @@ func (CTRL *BaseController) GetCache() {
 // GetDB set the orm connector into our controller
 // if repication activated we use slave to Slave
 func (CTRL *BaseController) GetDB(db ...string) orm.Ormer {
-	CTRL.db = database.MainDatabase.Orm
 	if len(db) > 0 {
-		if db[0] == "master" {
-			db[0] = "default"
-		}
-		CTRL.db.Using(db[0])
+		CTRL.db = database.MainDatabase.GetOrm(db[0])
+	} else {
+		CTRL.db = database.MainDatabase.GetOrm("")
 	}
 	return CTRL.db
 }
@@ -110,7 +109,7 @@ var DetectUserAgent = func(ctx *context.Context) {
 			device = "tablet"
 		}
 		if device == "" {
-			device = web.AppConfig.String("DefaultDevice")
+			device, _ = web.AppConfig.String("DefaultDevice")
 			if device == "" {
 				device = "desktop"
 			}

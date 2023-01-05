@@ -11,7 +11,7 @@ import (
 	"github.com/beego/beego/v2/server/web/context"
 )
 
-var sessionName = web.AppConfig.String("SessionName")
+var sessionName, _ = web.AppConfig.String("SessionName")
 
 // LoginController ...
 type LoginController struct {

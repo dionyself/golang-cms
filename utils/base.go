@@ -62,6 +62,6 @@ func DetectMimeType(file io.Reader) (string, error) {
 }
 
 func init() {
-	CurrentEnvironment = web.AppConfig.String("RunMode")
+	CurrentEnvironment, _ = web.AppConfig.String("RunMode")
 	SuportedMimeTypes = make(map[string][]string)
 }

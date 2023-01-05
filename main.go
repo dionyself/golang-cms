@@ -13,7 +13,7 @@ import (
 )
 
 func init() {
-	currentEnvironment := config.String("RunMode")
+	currentEnvironment, _ := config.String("RunMode")
 	utils.SessionInit(currentEnvironment)
 }
 

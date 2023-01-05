@@ -84,21 +84,22 @@ func syncronize(every time.Duration) {
 	localStorageBlk := "localStorageConfig-" + CurrentEnvironment + "::"
 	backupEnabled, _ := web.AppConfig.Bool(localStorageBlk + "backupEnabled")
 
-	source := web.AppConfig.String(localStorageBlk + "originFolder")
+	source, _ := web.AppConfig.String(localStorageBlk + "originFolder")
 	target := ""
 
-	targetFolder := web.AppConfig.String(localStorageBlk + "targetFolder")
-	storageUser := web.AppConfig.String(localStorageBlk + "storageUser")
-	servers := strings.Fields(web.AppConfig.String(localStorageBlk + "mode"))
-	customTarget := web.AppConfig.String(localStorageBlk + "customTarget")
-	syncBackup := web.AppConfig.String(localStorageBlk + "syncBackup")
-	backupFolder := web.AppConfig.String(localStorageBlk + "backupFolder")
+	targetFolder, _ := web.AppConfig.String(localStorageBlk + "targetFolder")
+	storageUser, _ := web.AppConfig.String(localStorageBlk + "storageUser")
+	s_l, _ := web.AppConfig.String(localStorageBlk + "mode")
+	servers := strings.Fields(s_l)
+	customTarget, _ := web.AppConfig.String(localStorageBlk + "customTarget")
+	syncBackup, _ := web.AppConfig.String(localStorageBlk + "syncBackup")
+	backupFolder, _ := web.AppConfig.String(localStorageBlk + "backupFolder")
 
 	for syncTime := range time.Tick(every) {
 		target = ""
 		fmt.Println("syncronzing files... at: ", syncTime)
-
-		switch web.AppConfig.String(localStorageBlk + "mode") {
+		st_mode, _ := web.AppConfig.String(localStorageBlk + "mode")
+		switch st_mode {
 		case "single":
 			if !backupEnabled {
 				fmt.Println("Sync disabled on single mode...")
@@ -173,7 +174,7 @@ func init() {
 	ImageSizes["custom-max"] = [2]int{3000, 2000}
 	SuportedMimeTypes["images"] = []string{"image/png", "image/jpeg"}
 
-	currentEnvironment := web.AppConfig.String("RunMode")
+	currentEnvironment, _ := web.AppConfig.String("RunMode")
 	localStorageBlk := "localStorageConfig-" + currentEnvironment + "::"
 	syncTime, _ := web.AppConfig.Int(localStorageBlk + "syncTime")
 	syncEnabled, _ := web.AppConfig.Bool(localStorageBlk + "enabled")

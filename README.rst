@@ -34,7 +34,6 @@ Quick Start
 
 To compile and run the installer execute. (you will need to use GO v1.7.4 or later)
 
-- go get -u  github.com/dionyself/beego
 - go get -u  github.com/beego/bee
 - go get -u  github.com/dionyself/golang-cms
 - cd $GOPATH/src/github.com/dionyself/golang-cms

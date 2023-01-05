@@ -1,10 +1,14 @@
 package models
 
 import (
+	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/core/validation"
-	"github.com/beego/beego/v2/server/web"
 	"github.com/dionyself/golang-cms/utils"
 )
+
+func init() {
+	logs.SetLogger(logs.AdapterConsole, `{"level":1}`)
+}
 
 // Validate RegisterForm data
 func (form *RegisterForm) Validate() bool {
@@ -12,7 +16,7 @@ func (form *RegisterForm) Validate() bool {
 	isValid := false
 	var err error
 	if isValid, err = validator.Valid(form); err != nil {
-		web.Error(err)
+		logs.Error(err)
 	} else {
 		if isValid {
 			if form.Password != form.PasswordRe {
@@ -24,7 +28,7 @@ func (form *RegisterForm) Validate() bool {
 			form.InvalidFields = make(map[string]string, len(validator.Errors))
 			for _, err := range validator.Errors {
 				form.InvalidFields[err.Key] = err.Message
-				web.Debug(err.Key, err.Message)
+				logs.Debug(err.Key, err.Message)
 			}
 		}
 	}
@@ -37,7 +41,7 @@ func (form *ArticleForm) Validate() bool {
 	isValid := false
 	var err error
 	if isValid, err = validator.Valid(form); err != nil {
-		web.Error(err)
+		logs.Error(err)
 	} else {
 		if isValid {
 			if form.Category < 0 {
@@ -49,7 +53,7 @@ func (form *ArticleForm) Validate() bool {
 			form.InvalidFields = make(map[string]string, len(validator.Errors))
 			for _, err := range validator.Errors {
 				form.InvalidFields[err.Key] = err.Message
-				web.Debug(err.Key, err.Message)
+				logs.Debug(err.Key, err.Message)
 			}
 		}
 	}
@@ -62,7 +66,7 @@ func (form *ImageForm) Validate() bool {
 	isValid := false
 	var err error
 	if isValid, err = validator.Valid(form); err != nil {
-		web.Error(err)
+		logs.Error(err)
 	} else {
 		if isValid {
 			if !utils.ContainsKey(utils.ImageSizes, form.Targets) {
@@ -74,7 +78,7 @@ func (form *ImageForm) Validate() bool {
 			form.InvalidFields = make(map[string]string, len(validator.Errors))
 			for _, err := range validator.Errors {
 				form.InvalidFields[err.Key] = err.Message
-				web.Debug(err.Key, err.Message)
+				logs.Debug(err.Key, err.Message)
 			}
 		}
 	}
