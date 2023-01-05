@@ -4,7 +4,7 @@ LABEL "email"="dionyself@gmail.com"
 RUN apk add --no-cache git gcc g++
 RUN mkdir /app
 RUN cd /app && git clone https://github.com/dionyself/golang-cms && cd golang-cms \
- && go get -u github.com/beego/bee \
+ && go get github.com/beego/bee/v2 \
  && go mod tidy
 
 EXPOSE 8080
