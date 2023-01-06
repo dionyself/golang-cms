@@ -17,9 +17,9 @@ import (
 
 // BaseController Extendable
 type BaseController struct {
-	web.Controller
-	db    orm.Ormer
-	cache cache.CACHE
+	CustomController //web.Controller
+	db               orm.Ormer
+	cache            cache.CACHE
 }
 
 // ConfigPage receives template name and makes basic config to render it
