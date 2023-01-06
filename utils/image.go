@@ -21,6 +21,7 @@ import (
 
 var ImageSizes map[string][2]int
 
+// Image cutter
 func CropImage(img io.Reader, imgMimeType string, target string, anchorCoord [2]int) (image.Image, error) {
 	if MimeType, err := DetectMimeType(img); MimeType == imgMimeType && err == nil {
 		var decodedImage, croppedImg image.Image
@@ -47,6 +48,7 @@ func CropImage(img io.Reader, imgMimeType string, target string, anchorCoord [2]
 	return nil, nil
 }
 
+// Image uploader
 func UploadImage(target string, img image.Image) error {
 	localStorageBlk := "localStorageConfig-" + CurrentEnvironment + "::"
 	if enabled, err := web.AppConfig.Bool(localStorageBlk + "enabled"); enabled == true && err == nil {
@@ -65,6 +67,7 @@ func UploadImage(target string, img image.Image) error {
 	return uploadToRemote()
 }
 
+// Image hashing
 func getImageHash(img image.Image) string {
 	buf := new(bytes.Buffer)
 	jpeg.Encode(buf, img, nil)
@@ -79,7 +82,7 @@ func uploadToRemote() error {
 }
 
 func syncronize(every time.Duration) {
-	//var out bytes.Buffer
+	// var out bytes.Buffer
 	var cmd *exec.Cmd
 	localStorageBlk := "localStorageConfig-" + CurrentEnvironment + "::"
 	backupEnabled, _ := web.AppConfig.Bool(localStorageBlk + "backupEnabled")

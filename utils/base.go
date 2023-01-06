@@ -9,23 +9,10 @@ import (
 	"github.com/beego/beego/v2/server/web"
 )
 
-/*
-func Containss(slice []string, item string) bool {
-	set := make(map[string]struct{}, len(slice))
-	for _, s := range slice {
-		set[s] = struct{}{}
-	}
-
-	_, ok := set[item]
-	return ok
-}
-*/
-
-// Contains Verify if slice contains x string
-
 var CurrentEnvironment string
 var SuportedMimeTypes map[string][]string
 
+// Contains Verify if slice contains x string
 func Contains(stringSlice []string, stringToSearch string) bool {
 	for _, stringElement := range stringSlice {
 		if stringElement == stringToSearch {
@@ -35,6 +22,7 @@ func Contains(stringSlice []string, stringToSearch string) bool {
 	return false
 }
 
+// ContainsKey Verify if map contains x string --DEPRECATED
 func ContainsKey(thisMap interface{}, key string) bool {
 	keys := reflect.ValueOf(thisMap).MapKeys()
 	for _, v := range keys {
@@ -45,6 +33,7 @@ func ContainsKey(thisMap interface{}, key string) bool {
 	return false
 }
 
+// Merge 2 maps
 func MergeMaps(map1 map[string]string, map2 map[string]string) map[string]string {
 	for key, value := range map2 {
 		map1[key] = value
@@ -52,6 +41,7 @@ func MergeMaps(map1 map[string]string, map2 map[string]string) map[string]string
 	return map1
 }
 
+// Detects mimetype of a file
 func DetectMimeType(file io.Reader) (string, error) {
 	buff := make([]byte, 512) // docs tell that it take only first 512 bytes into consideration
 	if _, err := file.Read(buff); err != nil {
