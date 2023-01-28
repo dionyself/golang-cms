@@ -7,7 +7,7 @@ import (
 	"github.com/dionyself/golang-cms/models"
 	"encoding/json"
 	"net/http"
-	"github.com/dionyself/beego"
+	"github.com/beego/beego/v2/server/web"
 	"github.com/dionyself/websocket"
 )
 

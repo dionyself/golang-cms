@@ -1,28 +1,31 @@
-    <div class="container">
-		<h5 class="text-primarycolor">{{.Article.Title}}</h5>
-		    {{str2html .Article.Content}}
-        <div>
+<div class="container">
+    <h5 class="text-primarycolor">{{.Article.Title}}</h5>
+    {{str2html .Article.Content}}
+    <div>
         <style>
-		    .rating {
-                   unicode-bidi: bidi-override;
-                   direction: rtl;
-             }
-            .rating > span {
-                 display: inline-block;
-                 position: relative;
-                 width: 1.1em;
-              }
-           .rating > span:hover:before,
-           .rating > span:hover ~ span:before {
-           content: "\2605";
-           position: absolute;
-           font-size: 1.1em;
-           }
-        </style>
-		<div class="rating" style="font-size: 1.5em"><span>☆</span><span>☆</span><span>★</span><span>★</span><span>★</span>:gnitaR</div>
-        </div>
-		<div class="center comments-btn" style="">
-		<button class="show-comments btn">View comments (11)</button>
-		</div>
+            .rating {
+                unicode-bidi: bidi-override;
+                direction: rtl;
+            }
 
-	</div>
+            .rating>span {
+                display: inline-block;
+                position: relative;
+                width: 1.1em;
+            }
+
+            .rating>span:hover:before,
+            .rating>span:hover~span:before {
+                content: "\2605";
+                position: absolute;
+                font-size: 1.1em;
+            }
+        </style>
+        <div class="rating" style="font-size: 1.5em">
+            <span>☆</span><span>☆</span><span>★</span><span>★</span><span>★</span>:gnitaR</div>
+    </div>
+    <div class="center comments-btn" style="">
+        <button class="show-comments btn">View comments (11)</button>
+    </div>
+
+</div>
