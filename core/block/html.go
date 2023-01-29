@@ -20,7 +20,7 @@ type htmlBlock struct {
 	IsCacheable bool
 	index       int
 	templates   []string
-	tempate     string
+	template    string
 	position    int
 }
 

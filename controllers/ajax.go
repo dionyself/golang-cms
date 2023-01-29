@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"image"
 	"io"
 	"mime/multipart"
@@ -56,7 +57,7 @@ func (CTRL *AjaxController) uploadAndRegisterIMG(sessionKey string, img io.Reade
 	newImg.User = &user
 	CTRL.db.Insert(newImg)
 	CTRL.db.Insert(user)
-	status["image_id"] = string(user.Id)
+	status["image_id"] = fmt.Sprint(user.Id)
 	CTRL.cache.Set(sessionKey, status, 30)
 }
 
@@ -69,9 +70,9 @@ func (CTRL *AjaxController) GetImageUploadStatus() {
 	if err := json.Unmarshal(CTRL.Ctx.Input.RequestBody, &data); err != nil {
 		CTRL.Ctx.Output.SetStatus(400)
 	}
-	if status, err := CTRL.cache.GetMap(data["sessionKey"], 30); err == false {
+	if status, err := CTRL.cache.GetMap(data["sessionKey"], 30); !err {
 		data = status
-		data["image_id"] = string(imgID)
+		data["image_id"] = fmt.Sprint(imgID)
 	}
 	CTRL.Data["json"] = &data
 	CTRL.ServeJSON()

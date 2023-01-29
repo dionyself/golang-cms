@@ -98,10 +98,7 @@ func HasUser(user *models.User, username string) bool {
 	qs := orm.NewOrm()
 	user.Username = username
 	err = qs.Read(user, "Username")
-	if err == nil {
-		return true
-	}
-	return false
+	return err == nil
 }
 
 // VerifyPassword checks if pwd is correct
@@ -114,7 +111,7 @@ func VerifyPassword(rawPwd, encodedPwd string) bool {
 
 // VerifyUser virifies user credentials
 func VerifyUser(user *models.User, username, password string) (success bool) {
-	if HasUser(user, username) == false {
+	if !HasUser(user, username) {
 		return
 	}
 	if VerifyPassword(password, user.Password) {

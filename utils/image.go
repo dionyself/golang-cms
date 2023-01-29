@@ -51,15 +51,15 @@ func CropImage(img io.Reader, imgMimeType string, target string, anchorCoord [2]
 // Image uploader
 func UploadImage(target string, img image.Image) error {
 	localStorageBlk := "localStorageConfig-" + CurrentEnvironment + "::"
-	if enabled, err := web.AppConfig.Bool(localStorageBlk + "enabled"); enabled == true && err == nil {
+	if enabled, err := web.AppConfig.Bool(localStorageBlk + "enabled"); enabled && err == nil {
 		name := getImageHash(img)
 		url := fmt.Sprintf("./%s/%s_%v_%v.jpg", target, name, ImageSizes[target][0], ImageSizes[target][0])
 		out, err := os.Create(url)
-		defer out.Close()
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
+		defer out.Close()
 		if err = jpeg.Encode(out, img, nil); err == nil {
 			return err
 		}

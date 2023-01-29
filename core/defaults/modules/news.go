@@ -4,7 +4,7 @@ package modules
 type ModuleConfig struct {
 	Name   string
 	Menu   string
-	weight int
+	Weight int
 }
 
 // Modules ...
