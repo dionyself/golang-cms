@@ -50,9 +50,11 @@ Setting a development environment and/or contributing
 - go install github.com/beego/bee/v2
 - bee run
 
-To run unittests.
+To run unittests, integration tests and Selenium Automation Testing.
 
- - goconvey golang-cms/tests/
+ - go test ./...
+ - goconvey ./integration_tests
+ - webdriver ./automated_tests
 
 .. |bitcoin| image:: https://raw.githubusercontent.com/dionyself/golang-cms/master/static/img/btttcc.png
    :height: 230px
