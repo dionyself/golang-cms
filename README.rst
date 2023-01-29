@@ -1,3 +1,4 @@
+[![Test](https://github.com/dionyself/golang-cms/actions/workflows/test.yml/badge.svg)](https://github.com/dionyself/golang-cms/actions/workflows/test.yml)
 ##########
 GOLANG CMS
 ##########
