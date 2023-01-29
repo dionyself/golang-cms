@@ -1,0 +1,53 @@
+name: Test
+on:
+  push:
+    branches:
+      - master
+      - develop
+    paths:
+      - "**/*.go"
+      - "go.mod"
+      - "go.sum"
+      - ".github/workflows/test.yml"
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - master
+      - develop
+    paths:
+      - "**/*.go"
+      - "go.mod"
+      - "go.sum"
+      - ".github/workflows/test.yml"
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        go-version: [1.19.4]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Checkout codebase
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: go get .
+
+      - name: Run tests on sqlite3
+        env:
+          GOPATH: /home/runner/go
+          ORM_DRIVER: sqlite3
+          ORM_SOURCE: /tmp/sqlite3/orm_test.db
+        run: |
+          mkdir -p /tmp/sqlite3 && touch /tmp/sqlite3/orm_test.db
+          go test -coverprofile=coverage_sqlite3.txt -covermode=atomic ./...
+
