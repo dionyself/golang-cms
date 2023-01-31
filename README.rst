@@ -77,8 +77,8 @@ To run unittests, integration tests and Selenium Automation Testing.
 
 +------------------------------+
 | Donate to this project       |
-+-----------+-------+----------+
-| Bitcoin   |  XMR  | Paypal   |
-+-----------+-------+----------+
-| |bitcoin| + |xmr| + |paypal| +
-+-----------+-------+----------+
++-----------+----------+-------+
+| Bitcoin   |  Paypal  | XMR   |
++-----------+----------+-------+
+| |bitcoin| + |paypal| + |xmr| +
++-----------+----------+-------+
