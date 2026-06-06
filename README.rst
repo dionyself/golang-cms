@@ -41,23 +41,71 @@ Note: You will be running a pre-alpha version in testmode.
 Only Linux based OS are supported, please report any bug you find.
 if you can't see the demo please contact me.
 
-*****************************************************
-Setting a development environment and/or contributing
-*****************************************************
+************************************
+Setting up a development environment
+************************************
 
- Download, develop, compile and contribute! (requires a golang IDE, git and GO v1.19.4 or later)
+Quickstart — Docker (recommended)
+=================================
 
-- git clone https://github.com/dionyself/golang-cms.git
-- cd golang-cms
-- go get github.com/beego/bee/v2
-- go install github.com/beego/bee/v2
-- bee run
+The fastest way to run the demo locally. Requires only Docker.
 
-To run unittests, integration tests and Selenium Automation Testing.
+.. code-block:: bash
 
- - go test ./...
- - goconvey ./integration_tests
- - webdriver ./automated_tests
+   git clone https://github.com/dionyself/golang-cms.git
+   cd golang-cms
+   docker compose up --build
+
+Browse http://127.0.0.1:8080 and log in with ``user: test, password: test``.
+
+If you don't have ``docker compose`` (Compose v1), use ``docker-compose`` instead.
+
+Quickstart — local Go toolchain
+===============================
+
+Requires Go **1.21+** and a working C compiler (for the ``mattn/go-sqlite3`` cgo dependency).
+
+.. code-block:: bash
+
+   git clone https://github.com/dionyself/golang-cms.git
+   cd golang-cms
+   # Note: `go get` for installing executables is deprecated since Go 1.17.
+   # Use `go install` for the `bee` CLI.
+   go install github.com/beego/bee/v2@latest
+   export PATH="$PATH:$(go env GOPATH)/bin"
+   bee run
+
+Then open http://127.0.0.1:8080.
+
+If you prefer to manage dependencies through the standard toolchain, use:
+
+.. code-block:: bash
+
+   go mod download
+   go run .
+
+Troubleshooting
+===============
+
+* ``go get: command not found`` (Go 1.17+)
+   ``go get`` for installing executables was removed in Go 1.17. Use ``go install pkg@version`` instead.
+* ``cgo: C compiler not found`` when building ``go-sqlite3``
+   Install ``gcc`` (Linux: ``apt install build-essential`` / ``dnf install gcc`` ; macOS: ``xcode-select --install`` ; Windows: TDM-GCC or MinGW-w64).
+* Demo container exits immediately
+   Check ``docker logs <container_id>``; the most common cause is a port conflict on 8080.
+* ``bee: command not found`` after ``go install``
+   ``go install`` puts the binary in ``$(go env GOPATH)/bin``. Add that to your ``PATH`` (see the snippet above).
+
+****************
+Contributing
+****************
+
+* Fork the repository and create a feature branch.
+* Make sure ``go test ./...`` passes locally before opening a PR.
+* Run ``gofmt -s -w .`` and (optionally) ``golangci-lint run`` for style.
+* Open a pull request against the ``master`` branch.
+
+Integration tests live in ``integration_tests/`` and are run with the ``goconvey`` UI or ``go test``.
 
 .. |bitcoin| image:: https://raw.githubusercontent.com/dionyself/golang-cms/master/static/img/btttcc.png
    :height: 230px
